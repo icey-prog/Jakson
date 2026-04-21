@@ -2,7 +2,7 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import type { QuoteFormData, FieldErrors } from './quoteFormTypes';
 import { BASE_INPUT, inputStateClass } from './quoteFormTypes';
-import { NextButton, BackButton } from './NavButtons';
+import { BackButton } from './NavButtons';
 
 interface StepContactProps {
   formData: QuoteFormData;
