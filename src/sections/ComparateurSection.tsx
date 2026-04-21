@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Check, CheckCircle2, Star, Phone, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
+import SectionLabel from '@/components/SectionLabel';
 
 /* ── Data ── */
 const essentielFeatures = [
@@ -64,7 +65,7 @@ const ComparateurSection: React.FC = () => {
 
           {/* Header */}
           <ScrollReveal className="text-center mb-12">
-            <span className="section-badge mb-4">Tarifs</span>
+            <SectionLabel className="mb-4">Tarifs</SectionLabel>
             <h2 className="section-title text-white mb-4">Comparez Nos Formules</h2>
             <p className="section-subtitle text-white/60 mx-auto">
               Trois niveaux de protection pour s&apos;adapter à votre budget et vos besoins.

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, GraduationCap, Users, Briefcase, Shield } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import SectionLabel from '@/components/SectionLabel';
 import ProfileCardNew from '@/components/ProfileCardNew';
 import type { ProfileData } from '@/components/ProfileCardNew';
 
@@ -16,7 +17,7 @@ const profiles: ProfileData[] = [
     priceLabel: 'Dès 3 000 FCFA / mois',
     stat1: { label: 'Produits', value: '3' },
     stat2: { label: 'Budget', value: 'Éco.' },
-    icon: 'https://img.icons8.com/fluency/96/student-male.png',
+    icon: GraduationCap,
     badge: 'Populaire',
     accentColor: '#0F766E',
     products: ['Individuelle Accident', 'Responsabilité Civile', 'Assurance Voyage'],
@@ -32,7 +33,7 @@ const profiles: ProfileData[] = [
     priceLabel: 'Dès 12 000 FCFA / mois',
     stat1: { label: 'Produits', value: '5' },
     stat2: { label: 'Budget', value: 'Moyen' },
-    icon: 'https://img.icons8.com/fluency/96/family.png',
+    icon: Users,
     accentColor: '#0369A1',
     products: ['Multirisque Habitation', 'Individuelle Accident', 'Assurance Auto', 'RC Vie Privée', 'Assurance Voyage'],
   },
@@ -47,7 +48,7 @@ const profiles: ProfileData[] = [
     priceLabel: 'Dès 20 000 FCFA / mois',
     stat1: { label: 'Produits', value: '6' },
     stat2: { label: 'Budget', value: 'Pro' },
-    icon: 'https://img.icons8.com/fluency/96/businessman.png',
+    icon: Briefcase,
     accentColor: '#7C3AED',
     products: ['RC Décennale', 'Tous Risques Chantier', 'Transport Marchandises', 'Incendie', 'Individuelle Accident', 'RC Pro'],
   },
@@ -62,7 +63,7 @@ const profiles: ProfileData[] = [
     priceLabel: 'Dès 8 000 FCFA / mois',
     stat1: { label: 'Produits', value: '4' },
     stat2: { label: 'Budget', value: 'Confort' },
-    icon: 'https://img.icons8.com/fluency/96/elderly-person.png',
+    icon: Shield,
     accentColor: '#B45309',
     products: ['Multirisque Habitation', 'Individuelle Accident', 'RC Vie Privée', 'Assurance Voyage'],
   },
@@ -99,7 +100,7 @@ const ProfileSimulator: React.FC = () => {
         <div className="section-inner">
 
           <ScrollReveal className="text-center mb-12">
-            <span className="section-badge mb-4">Votre Profil</span>
+            <SectionLabel className="mb-4">Votre Profil</SectionLabel>
             <h2 className="section-title mb-4">Quelle assurance vous correspond ?</h2>
             <p className="section-subtitle mx-auto">
               Sélectionnez votre profil — nous vous guidons vers vos meilleures solutions.

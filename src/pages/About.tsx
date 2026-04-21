@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import SOSButton from '@/components/SOSButton';
 import ScrollReveal from '@/components/ScrollReveal';
 import AmbientOrb from '@/components/AmbientOrb';
+import SectionLabel from '@/components/SectionLabel';
 
 const stats = [
   { value: 2013, suffix: '', label: 'Année de création', display: '2013' },
@@ -75,9 +76,7 @@ const AboutPage: React.FC = () => {
               <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-white/60 hover:text-white transition-colors mb-10">
                 <ArrowLeft size={16} /> Retour
               </Link>
-              <span className="section-badge !text-jackson-vivid !border-jackson-vivid/30 !bg-jackson-vivid/10 mb-6">
-                À Propos
-              </span>
+              <SectionLabel dark className="mb-6">À Propos</SectionLabel>
               <h1 className="font-body font-black text-white text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.9] tracking-tight mb-6 max-w-2xl">
                 Dire ce que nous faisons, faire ce que nous disons.
               </h1>
@@ -95,7 +94,7 @@ const AboutPage: React.FC = () => {
             <div className="section-inner">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <ScrollReveal>
-                  <span className="section-badge mb-5">Notre Histoire</span>
+                  <SectionLabel align="left" className="mb-5">Notre Histoire</SectionLabel>
                   <h2 className="section-title mb-6">Une entreprise née de la vision de promoteurs nationaux</h2>
                   <p className="text-slate-600 dark:text-white/70 leading-relaxed mb-4">
                     Société Anonyme au capital de <strong className="text-slate-900 dark:text-white">5 000 000 000 F CFA</strong>,
@@ -136,7 +135,7 @@ const AboutPage: React.FC = () => {
           <div className="section-container">
             <div className="section-inner">
               <ScrollReveal className="text-center mb-14">
-                <span className="section-badge mb-4">Nos Agences</span>
+                <SectionLabel className="mb-4">Nos Agences</SectionLabel>
                 <h2 className="section-title mb-4">Présents partout au Burkina Faso</h2>
               </ScrollReveal>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">

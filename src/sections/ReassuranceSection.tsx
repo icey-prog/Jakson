@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
+import SectionLabel from '@/components/SectionLabel';
 import AmbientOrb from '@/components/AmbientOrb';
 import TestimonialCard from '@/components/TestimonialCard';
 
@@ -141,13 +143,14 @@ const ReassuranceSection: React.FC = () => {
         {/* À propos de nous */}
         <ScrollReveal className="mb-16 md:mb-24">
           <div className="max-w-[800px] mx-auto text-center">
-            <span className="section-badge mb-4">À propos de nous</span>
+            <SectionLabel className="mb-4">À propos de nous</SectionLabel>
             <h2 className="section-title mb-6">Jackson Assurances</h2>
-            <p className="text-lg md:text-xl text-slate-700 dark:text-white/80 leading-relaxed">
-              Société Anonyme au capital de 5 000 000 000 F CFA, entièrement libéré, Jackson Assurances a été créée par des promoteurs nationaux. Elle a débuté ses activités en janvier 2013.<br /><br />
-              Située sur l’Avenue TANSOBA Goolma, elle est dirigée par une jeune équipe dynamique, suffisamment motivée et pétrie de nombreuses années d’expérience professionnelle dans le secteur des assurances au Burkina Faso.<br /><br />
-              La société est spécialisée dans toutes les branches d’assurance non Vie, c’est-à-dire Incendie, Accidents, Risques Divers et Transport (IARDT).
+            <p className="text-lg md:text-xl text-slate-700 dark:text-white/80 leading-relaxed mb-6">
+              Créée en 2013 par des promoteurs nationaux, Jackson Assurances est spécialisée dans toutes les branches d’assurance non Vie (Incendie, Accidents, Risques Divers et Transport). Notre équipe dynamique et experte met son savoir-faire à votre service pour vous garantir la meilleure protection.
             </p>
+            <Link to="/about" className="inline-flex items-center gap-2 font-semibold text-jackson-deep dark:text-jackson-vivid hover:underline">
+              Découvrir notre histoire <ChevronRight size={18} />
+            </Link>
           </div>
         </ScrollReveal>
 
@@ -171,9 +174,7 @@ const ReassuranceSection: React.FC = () => {
         <div className="section-inner">
           {/* Testimonials Title */}
           <ScrollReveal className="text-center mb-16">
-            <span className="section-badge mb-4">
-              Témoignages
-            </span>
+            <SectionLabel className="mb-4">Témoignages</SectionLabel>
             <h2 className="section-title mb-4">
               Ils nous font confiance
             </h2>

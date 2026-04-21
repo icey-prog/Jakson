@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import SOSButton from '@/components/SOSButton';
 import ScrollReveal from '@/components/ScrollReveal';
 import AmbientOrb from '@/components/AmbientOrb';
+import SectionLabel from '@/components/SectionLabel';
 
 const categories = [
   {
@@ -64,7 +65,7 @@ const FAQPage: React.FC = () => {
               <Link to="/" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 dark:text-white/60 hover:text-jackson-deep dark:hover:text-jackson-vivid transition-colors mb-10">
                 <ArrowLeft size={16} /> Retour
               </Link>
-              <span className="section-badge mb-6">FAQ</span>
+              <SectionLabel align="left" className="mb-6">FAQ</SectionLabel>
               <h1 className="section-title mb-5 max-w-xl">Questions fréquemment posées</h1>
               <p className="section-subtitle">
                 Toutes vos questions sur nos services, la souscription et la gestion de sinistres.

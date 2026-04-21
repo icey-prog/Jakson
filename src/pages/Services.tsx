@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import SOSButton from '@/components/SOSButton';
 import ScrollReveal from '@/components/ScrollReveal';
+import SectionLabel from '@/components/SectionLabel';
 import { ALL_SERVICES } from '@/sections/ServicesSection';
 
 const ServicesPage: React.FC = () => {
@@ -24,7 +25,7 @@ const ServicesPage: React.FC = () => {
 
             {/* Header */}
             <ScrollReveal className="mb-16 max-w-2xl">
-              <span className="section-badge mb-4">Nos Solutions</span>
+              <SectionLabel align="left" className="mb-4">Nos Solutions</SectionLabel>
               <h1 className="section-title mb-4">
                 10 assurances pour protéger chaque aspect de votre vie
               </h1>
@@ -36,39 +37,44 @@ const ServicesPage: React.FC = () => {
 
             {/* Full grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
-              {ALL_SERVICES.map((service, i) => (
-                <ScrollReveal key={service.title} delay={i * 60}>
-                  <div
-                    className="group relative p-7 rounded-[24px] overflow-hidden cursor-pointer
-                      transition-all duration-300 hover:scale-[1.02]
-                      hover:shadow-[0_16px_48px_rgba(15,23,42,0.10)]
-                      border border-transparent hover:border-white/60"
-                    style={{ backgroundColor: service.bgLight }}
-                  >
-                    {/* Icon */}
-                    <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-5 shadow-sm"
-                      style={{ backgroundColor: service.iconBg + '20' }}>
-                      <img src={service.icon} alt={service.title} className="w-8 h-8 object-contain" loading="lazy" />
-                    </div>
-
-                    {service.tag && (
-                      <span className="absolute top-5 right-5 px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm text-[11px] font-bold text-slate-700">
-                        {service.tag}
-                      </span>
-                    )}
-
-                    <h3 className="font-body font-bold text-[19px] text-slate-900 mb-2">{service.title}</h3>
-                    <p className="text-[14px] text-slate-600 leading-relaxed mb-5">{service.description}</p>
-
-                    <a
-                      href="/#formulaire"
-                      className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 group-hover:gap-2.5 transition-all duration-200"
+              {ALL_SERVICES.map((service, i) => {
+                const Icon = service.icon;
+                return (
+                  <ScrollReveal key={service.title} delay={i * 60}>
+                    <div
+                      className="group relative p-7 rounded-[24px] overflow-hidden cursor-pointer
+                        transition-all duration-300 hover:scale-[1.02]
+                        hover:shadow-[0_16px_48px_rgba(15,23,42,0.10)]
+                        border border-transparent hover:border-white/60"
+                      style={{ backgroundColor: service.bgLight }}
                     >
-                      Demander un devis <ArrowRight size={13} />
-                    </a>
-                  </div>
-                </ScrollReveal>
-              ))}
+                      {/* Apple-style icon: clean stroke on tinted bg */}
+                      <div
+                        className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5"
+                        style={{ backgroundColor: service.iconBg + '18' }}
+                      >
+                        <Icon size={22} strokeWidth={1.75} style={{ color: service.iconBg }} />
+                      </div>
+
+                      {service.tag && (
+                        <span className="absolute top-5 right-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                          {service.tag}
+                        </span>
+                      )}
+
+                      <h3 className="font-body font-bold text-[19px] text-slate-900 mb-2">{service.title}</h3>
+                      <p className="text-[14px] text-slate-600 leading-relaxed mb-5">{service.description}</p>
+
+                      <a
+                        href="/#formulaire"
+                        className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 group-hover:gap-2.5 transition-all duration-200"
+                      >
+                        Demander un devis <ArrowRight size={13} />
+                      </a>
+                    </div>
+                  </ScrollReveal>
+                );
+              })}
             </div>
 
             {/* CTA */}

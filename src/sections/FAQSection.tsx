@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
+import SectionLabel from '@/components/SectionLabel';
 
 const faqs = [
   {
@@ -81,7 +82,7 @@ const FAQSection: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             {/* Left — title + contact nudge */}
             <ScrollReveal className="lg:sticky lg:top-28">
-              <span className="section-badge mb-4">FAQ</span>
+              <SectionLabel align="left" className="mb-4">FAQ</SectionLabel>
               <h2 className="section-title mb-6">
                 Questions fréquentes
               </h2>
