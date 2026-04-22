@@ -67,7 +67,7 @@ const PartnersSection: React.FC = () => {
       {/* Orbit anchor — slightly above section top */}
       <div className="absolute top-[-60px] md:top-[-100px] left-1/2 -translate-x-1/2 w-0 h-0 z-0 pointer-events-none">
         <div ref={ringRef} className="relative w-0 h-0">
-          {partners.map((partner, i) => (
+          {partners.map((partner) => (
             <div
               key={partner.name}
               data-orbit-item=""
