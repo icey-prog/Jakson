@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import ScrollReveal from '@/components/ScrollReveal';
-import AmbientOrb from '@/components/AmbientOrb';
+import { useAuroraCanvas } from '@/hooks/useAuroraCanvas';
 
 const CTAFinalSection: React.FC = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useAuroraCanvas(canvasRef);
+
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     document.querySelector('#formulaire')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="relative section-padding bg-jackson-deep overflow-hidden">
-      <AmbientOrb size={500} opacity={0.25} className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+    <section
+      className="relative section-padding overflow-hidden"
+      style={{ background: '#020d0b' }}
+    >
+      {/* Aurora animation layer */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 z-0 w-full h-full pointer-events-none opacity-75"
+      />
+
+      {/* Brand tint overlays */}
+      <div className="absolute inset-0 z-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 55% 60% at 8% 55%, rgba(15,118,110,0.22), transparent)' }} />
+      <div className="absolute inset-0 z-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 40% 30% at 50% 0%, rgba(20,184,166,0.07), transparent)' }} />
 
       <div className="relative z-10 max-w-[800px] mx-auto px-6 lg:px-[5vw] text-center">
         <ScrollReveal>

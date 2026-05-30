@@ -1,31 +1,17 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import ScrollReveal from '@/components/ScrollReveal';
 import TextReveal from '@/components/TextReveal';
-import { useAuroraCanvas } from '@/hooks/useAuroraCanvas';
+import AmbientOrb from '@/components/AmbientOrb';
 import QuoteForm from '@/components/formulaire/QuoteForm';
 import CallbackCard from '@/components/formulaire/CallbackCard';
 
 const FormulaireSection: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  useAuroraCanvas(canvasRef);
-
   return (
     <section
       id="formulaire"
-      className="relative overflow-hidden py-24 md:py-32"
-      style={{ background: '#020d0b' }}
+      className="relative overflow-hidden py-24 md:py-32 bg-jackson-deep"
     >
-      {/* Aurora animation layer */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 z-0 w-full h-full pointer-events-none opacity-75"
-      />
-
-      {/* Brand tint overlays */}
-      <div className="absolute inset-0 z-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 55% 60% at 8% 55%, rgba(15,118,110,0.22), transparent)' }} />
-      <div className="absolute inset-0 z-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 40% 30% at 50% 0%, rgba(20,184,166,0.07), transparent)' }} />
+      <AmbientOrb size={500} opacity={0.25} className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
       <div className="relative z-10 section-container">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
