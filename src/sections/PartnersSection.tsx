@@ -6,12 +6,10 @@ const partners = [
   { name: 'Continental Re', abbr: 'CR', color: '#0F766E' },
   { name: 'NCARE',          abbr: 'NC', color: '#7c3aed' },
   { name: 'CICARE',         abbr: 'CI', color: '#b45309' },
-  { name: 'CICA-RE',        abbr: 'CA', color: '#0369a1' },
-  { name: 'SEN-RE',         abbr: 'SR', color: '#166534' },
 ];
 
-// Spread 6 items in a fan arc (-75° → +75°)
-const ORBIT_ANGLES = [-75, -45, -15, 15, 45, 75];
+// Spread 4 items in a fan arc (-60° → +60°)
+const ORBIT_ANGLES = [-60, -20, 20, 60];
 
 const getRadius = (): number => {
   if (typeof window === 'undefined') return 560;

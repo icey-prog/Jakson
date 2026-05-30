@@ -70,7 +70,7 @@ const Footer: React.FC = () => {
             <h4 className="font-display text-base font-semibold mb-5">Contact</h4>
             <div className="space-y-3 text-sm">
               <p className="text-white/60">
-                Avenue TANSOBA Goolma<br/>
+                Avenue de l'UEMOA / Patte d'Oie<br/>
                 01 BP 2545 Ouagadougou 01<br/>
                 Face au CCVA
               </p>

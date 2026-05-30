@@ -6,10 +6,9 @@ import AmbientOrb from '@/components/AmbientOrb';
 import TestimonialCard from '@/components/TestimonialCard';
 
 const stats = [
-  { value: 99.9,  suffix: '%',   label: 'de sinistres traités en moins de 48h', isDecimal: true },
-  { value: 50000, suffix: '+',   label: 'clients nous font confiance', format: true },
-  { value: 4.8,   suffix: '/5',  label: 'note moyenne de satisfaction', isDecimal: true },
-  { value: 0,     suffix: ' IA', label: 'Zéro IA — 100% Conseillers humains', isZero: true },
+  { value: 99.9,  suffix: '%',  label: 'de sinistres traités en moins de 48h', isDecimal: true },
+  { value: 50000, suffix: '+',  label: 'clients nous font confiance', format: true },
+  { value: 4.8,   suffix: '/5', label: 'note moyenne de satisfaction', isDecimal: true },
 ];
 
 const testimonials = [
@@ -52,7 +51,7 @@ const testimonials = [
 
 const ReassuranceSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [animatedStats, setAnimatedStats] = useState<number[]>([0, 0, 0, 0]);
+  const [animatedStats, setAnimatedStats] = useState<number[]>([0, 0, 0]);
   const statsAnimated = useRef(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -155,7 +154,7 @@ const ReassuranceSection: React.FC = () => {
 
         {/* Stats Grid */}
         <ScrollReveal className="mb-16 md:mb-24">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-container mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 max-w-container mx-auto">
             {stats.map((stat, i) => (
               <div key={stat.label} className="text-center p-6 bg-apple-parchment rounded-[18px] border border-apple-hairline">
                 <p className="font-display font-semibold text-apple-blue leading-[1.07] tracking-[-0.28px] mb-2"

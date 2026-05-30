@@ -1,5 +1,4 @@
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useRef } from 'react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface ProfileData {
@@ -26,107 +25,117 @@ interface ProfileCardNewProps {
 
 const ProfileCardNew: React.FC<ProfileCardNewProps> = ({ profile, isActive, onClick }) => {
   const Icon = profile.icon;
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.transform = `perspective(1000px) rotateX(${-y * 6}deg) rotateY(${x * 6}deg) translateZ(6px)`;
+    el.style.transition = 'transform 0.1s linear';
+  };
+
+  const handleMouseLeave = () => {
+    const el = cardRef.current;
+    if (!el) return;
+    el.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+    el.style.transition = 'transform 0.55s cubic-bezier(0.23, 1, 0.32, 1)';
+  };
 
   return (
     <div
+      ref={cardRef}
       onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ willChange: 'transform' }}
       className={`
-        group relative rounded-[28px] overflow-hidden bg-white cursor-pointer select-none
-        transition-all duration-400 shrink-0
+        relative rounded-[28px] overflow-hidden cursor-pointer select-none
         ${isActive
-          ? 'shadow-[0_20px_60px_rgba(15,118,110,0.25),0_0_0_2px_#0F766E] scale-[1.02]'
-          : 'shadow-[0_4px_24px_rgba(15,23,42,0.08)] hover:shadow-[0_12px_40px_rgba(15,23,42,0.14)] hover:scale-[1.01]'
+          ? 'shadow-[0_24px_60px_rgba(15,118,110,0.35),0_0_0_2.5px_#0F766E]'
+          : 'shadow-[0_8px_32px_rgba(15,23,42,0.18)]'
         }
       `}
-      style={{ transitionTimingFunction: 'cubic-bezier(0.25,0.1,0.25,1)' }}
     >
-      {/* Illustration */}
-      <div
-        className="relative h-56 overflow-hidden"
-        style={{ backgroundColor: profile.illustrationBg ?? '#f0fdfa' }}
-      >
+      {/* ── Photo ── */}
+      <div className="relative h-52 overflow-hidden">
         <img
           src={profile.image}
           alt={profile.title}
-          className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-600"
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-[1.04]"
           loading="lazy"
         />
 
-        {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white/70 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0f1923] to-transparent" />
 
-        {/* Badge — Apple-style: no pill, just clean uppercase text */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+          <span className="w-4 h-1.5 rounded-full bg-white" />
+          <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+          <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+        </div>
+
         {profile.badge && (
-          <span className="absolute top-3 left-3 text-[10px] font-semibold uppercase tracking-[0.18em] bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-lg text-slate-600 shadow-sm">
+          <span className="absolute top-3 left-3 text-[10px] font-bold uppercase tracking-[0.18em] bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full text-slate-700 shadow-sm">
             {profile.badge}
           </span>
         )}
 
-        {/* Active checkmark */}
         {isActive && (
-          <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-jackson-deep flex items-center justify-center shadow-md">
-            <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-              <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          <div
+            className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center shadow-lg z-10"
+            style={{ backgroundColor: profile.accentColor }}
+          >
+            <svg width="11" height="9" viewBox="0 0 11 9" fill="none">
+              <path d="M1 4.5L4 7.5L10 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         )}
 
-        {/* Lucide icon chip — bottom-right */}
         <div
-          className="absolute bottom-3 right-3 w-9 h-9 rounded-xl bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center"
-          style={{ color: profile.accentColor }}
+          className="absolute bottom-10 right-3 w-8 h-8 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center z-10"
+          style={{ color: 'white' }}
         >
-          <Icon size={16} strokeWidth={1.75} />
+          <Icon size={14} strokeWidth={1.75} />
         </div>
       </div>
 
-      {/* Card body */}
-      <div className="p-5 dark:bg-slate-800">
-
-        {/* Title + price */}
-        <div className="mb-2">
-          <h3 className="font-body font-bold text-[20px] text-slate-900 dark:text-white leading-tight">
+      {/* ── Dark content ── */}
+      <div className="bg-[#0f1923] px-5 pt-4 pb-5">
+        <div className="flex items-start justify-between gap-3 mb-2">
+          <h3 className="text-white font-bold text-[19px] leading-tight tracking-[-0.3px]">
             {profile.title}
           </h3>
-          <p className="text-[12px] font-medium text-slate-400 dark:text-white/40 mt-0.5 uppercase tracking-wide">
-            {profile.priceLabel}
-          </p>
+          <span className="shrink-0 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white/10 text-white/75 whitespace-nowrap mt-0.5 border border-white/10">
+            {profile.priceLabel.replace(' / mois', '/m')}
+          </span>
         </div>
 
-        <p className="text-[13px] text-slate-500 dark:text-white/60 leading-relaxed mb-4 line-clamp-2">
+        <p className="text-white/50 text-[13px] leading-relaxed mb-4 line-clamp-2">
           {profile.description}
         </p>
 
-        {/* Stats */}
-        <div className="flex border-t border-slate-100 dark:border-slate-700 pt-4 mb-4">
-          <div className="flex-1 text-center">
-            <p className="text-[10px] font-semibold text-slate-400 dark:text-white/35 uppercase tracking-[0.16em]">
-              {profile.stat1.label}
-            </p>
-            <p className="text-[18px] font-bold text-slate-900 dark:text-white mt-0.5">
-              {profile.stat1.value}
-            </p>
-          </div>
-          <div className="w-px bg-slate-100 dark:bg-slate-700 mx-2" />
-          <div className="flex-1 text-center">
-            <p className="text-[10px] font-semibold text-slate-400 dark:text-white/35 uppercase tracking-[0.16em]">
-              {profile.stat2.label}
-            </p>
-            <p className="text-[18px] font-bold text-slate-900 dark:text-white mt-0.5">
-              {profile.stat2.value}
-            </p>
-          </div>
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          {profile.products.slice(0, 2).map(prod => (
+            <span
+              key={prod}
+              className="text-[11px] font-medium text-white/60 bg-white/[0.07] border border-white/10 px-2.5 py-1 rounded-full"
+            >
+              {prod}
+            </span>
+          ))}
+          {profile.products.length > 2 && (
+            <span className="text-[11px] font-medium text-white/40 px-2 py-1">
+              +{profile.products.length - 2}
+            </span>
+          )}
         </div>
 
-        {/* CTA */}
         <button
-          className={`w-full py-3 rounded-[14px] font-semibold text-[14px] flex items-center justify-center gap-2 transition-all duration-250 ${
-            isActive
-              ? 'bg-jackson-deep text-white shadow-[0_4px_14px_rgba(15,118,110,0.4)]'
-              : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-jackson-deep dark:hover:bg-jackson-cream'
-          }`}
+          className="w-full bg-white text-slate-900 font-semibold text-[15px] py-[13px] rounded-[16px] hover:bg-white/90 active:scale-95 transition-all duration-150"
         >
-          Voir mes offres <ArrowRight size={14} />
+          Voir mes offres
         </button>
       </div>
     </div>

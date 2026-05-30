@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Check, Clock } from 'lucide-react';
+import { Check, Clock, Lock, Zap, UserCheck, MapPin } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 
 const TRUST_BADGES = [
-  { icon: '🔒', label: 'Données sécurisées' },
-  { icon: '⚡', label: 'Réponse sous 24h' },
-  { icon: '🤝', label: 'Sans engagement' },
-  { icon: '🇧🇫', label: 'Conseiller local' },
-] as const;
+  { Icon: Lock,      label: 'Données sécurisées' },
+  { Icon: Zap,       label: 'Réponse sous 24h'   },
+  { Icon: UserCheck, label: 'Sans engagement'     },
+  { Icon: MapPin,    label: 'Conseiller local'    },
+];
 
 const GLASS_STYLE: React.CSSProperties = {
   background: 'radial-gradient(140% 140% at 20% 20%, rgba(255,255,255,0.07), transparent 40%), linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.2))',
@@ -57,9 +57,10 @@ const CallbackForm: React.FC<CallbackFormProps> = ({ phone, onPhoneChange, onSub
 /* ── Trust row ── */
 const TrustBadges: React.FC = () => (
   <div className="mt-5 grid grid-cols-2 gap-3">
-    {TRUST_BADGES.map(({ icon, label }) => (
+    {TRUST_BADGES.map(({ Icon, label }) => (
       <div key={label} className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-white/10 bg-white/5 text-xs text-white/55 font-medium">
-        <span>{icon}</span> {label}
+        <Icon size={13} className="shrink-0 text-white/40" />
+        {label}
       </div>
     ))}
   </div>

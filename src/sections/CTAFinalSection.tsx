@@ -32,7 +32,7 @@ const CTAFinalSection: React.FC = () => {
         <ScrollReveal>
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/15 text-white text-[12px] font-normal tracking-[-0.12px] mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse-dot" />
-            Zéro IA — 100% Humain
+            Agréée · CIMA · Burkina Faso
           </span>
           <h2 className="font-display font-semibold text-white mb-6 leading-[1.07] tracking-[-0.28px]"
             style={{ fontSize: 'clamp(2rem, 5vw, 40px)' }}>
@@ -67,7 +67,7 @@ const CTAFinalSection: React.FC = () => {
 
         <ScrollReveal delay={450}>
           <p className="text-[12px] text-white/50 tracking-[-0.12px] mt-6">
-            Lun-Ven, 8h30-18h30 — Aucun répondeur automatisé, toujours un humain.
+            Lun-Ven 7h30-16h30 · Sam 8h-12h — Aucun répondeur automatisé, toujours un humain.
           </p>
         </ScrollReveal>
       </div>

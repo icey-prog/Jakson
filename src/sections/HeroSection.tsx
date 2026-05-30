@@ -5,10 +5,9 @@ import AmbientOrb from '@/components/AmbientOrb';
 import { useAvailability } from '@/hooks/useAvailability';
 
 const stats = [
-  { value: 20,    suffix: '+',    label: "Années d'expérience" },
-  { value: 50000, suffix: '+',    label: 'Clients protégés', format: true },
-  { value: 98,    suffix: '%',    label: 'Satisfaction client' },
-  { value: 0,     suffix: ' IA',  label: 'Zéro IA, 100% Humain', isZero: true },
+  { value: 20,    suffix: '+',  label: "Années d'expérience" },
+  { value: 50000, suffix: '+',  label: 'Clients protégés', format: true },
+  { value: 98,    suffix: '%',  label: 'Satisfaction client' },
 ];
 
 const HeroSection: React.FC = () => {
@@ -18,7 +17,7 @@ const HeroSection: React.FC = () => {
   const ctaRef      = useRef<HTMLDivElement>(null);
   const statsRef    = useRef<HTMLDivElement>(null);
   const badgeRef    = useRef<HTMLDivElement>(null);
-  const [counters, setCounters] = useState<number[]>([0, 0, 0, 0]);
+  const [counters, setCounters] = useState<number[]>([0, 0, 0]);
   const isAvailable = useAvailability();
 
   useEffect(() => {
@@ -54,8 +53,8 @@ const HeroSection: React.FC = () => {
   }, []);
 
   const formatNumber = (num: number, index: number) => {
-    if (stats[index].isZero) return '0';
-    if (stats[index].format && num >= 1000) return Math.round(num / 1000).toLocaleString('fr-FR') + ' 000';
+    if ((stats[index] as any).isZero) return '0';
+    if ((stats[index] as any).format && num >= 1000) return Math.round(num / 1000).toLocaleString('fr-FR') + ' 000';
     return num.toString();
   };
 
@@ -103,7 +102,7 @@ const HeroSection: React.FC = () => {
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse-dot" />
               {isAvailable
                 ? 'Vrais conseillers disponibles maintenant'
-                : 'Aucune IA — de vrais experts disponibles lun-ven 8h30-18h30'}
+                : 'Aucune IA — de vrais experts disponibles lun-ven 7h30-16h30, sam 8h-12h'}
             </span>
           </div>
 
@@ -154,7 +153,7 @@ const HeroSection: React.FC = () => {
       <div ref={statsRef} className="relative z-10 mx-6 lg:mx-[5vw] mb-8 opacity-0">
         <div className="max-w-container mx-auto">
           <div className="bg-white/10 backdrop-blur-2xl border border-white/12 rounded-[18px] p-6 md:p-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <div className="grid grid-cols-3 gap-6 md:gap-8">
               {stats.map((stat, i) => (
                 <div key={stat.label} className="text-center">
                   <p className="font-display font-semibold text-white leading-[1.07] tracking-[-0.28px]"

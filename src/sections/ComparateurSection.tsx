@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Check, CheckCircle2, Star, Phone, Sparkles } from 'lucide-react';
 import { Link } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
+import { useAnimeReveal } from '@/hooks/useAnimeReveal';
 
 /* ── Data ── */
 const essentielFeatures = [
@@ -44,6 +45,7 @@ const FeatureItem: React.FC<{ text: string; variant?: 'default' | 'featured' }> 
 /* ── Main ── */
 const ComparateurSection: React.FC = () => {
   const [annual, setAnnual] = useState(true);
+  const cardsRef = useAnimeReveal<HTMLDivElement>({ selector: '[data-card]', stagger: 120, translateY: 40 });
 
   const scrollToForm = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -93,11 +95,11 @@ const ComparateurSection: React.FC = () => {
           </ScrollReveal>
 
           {/* Cards grid */}
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div ref={cardsRef} className="grid gap-6 lg:grid-cols-3">
 
             {/* ── Essentiel ── */}
-            <ScrollReveal delay={80}>
-              <div className="border border-white/10 rounded-[18px] p-6 backdrop-blur-xl h-full flex flex-col">
+            <div data-card>
+              <div className="border border-white/10 rounded-[18px] p-6 backdrop-blur-xl h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.06)]">
                 <div>
                   <p className="text-[12px] uppercase tracking-[0.18em] text-white/50 font-semibold">Essentiel</p>
                   <div className="mt-3 flex items-end gap-2">
@@ -120,11 +122,11 @@ const ComparateurSection: React.FC = () => {
                   {essentielFeatures.map(f => <FeatureItem key={f} text={f} />)}
                 </ul>
               </div>
-            </ScrollReveal>
+            </div>
 
             {/* ── Confort (featured) ── */}
-            <ScrollReveal delay={160}>
-              <div className="border border-apple-blue/30 ring-1 ring-apple-blue/20 rounded-[18px] p-2 relative backdrop-blur-xl h-full flex flex-col">
+            <div data-card>
+              <div className="border border-apple-blue/30 ring-1 ring-apple-blue/20 rounded-[18px] p-2 relative backdrop-blur-xl h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_60px_rgba(41,151,255,0.15)]">
                 <div className="relative overflow-hidden rounded-[14px] bg-gradient-to-b from-white/[0.06] to-transparent flex-1 flex flex-col">
 
                   {/* Hero gradient top (conservé) */}
@@ -169,11 +171,11 @@ const ComparateurSection: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </ScrollReveal>
+            </div>
 
             {/* ── Premium ── */}
-            <ScrollReveal delay={240}>
-              <div className="border border-white/10 ring-1 ring-apple-blue/10 rounded-[18px] p-6 backdrop-blur-xl h-full flex flex-col">
+            <div data-card>
+              <div className="border border-white/10 ring-1 ring-apple-blue/10 rounded-[18px] p-6 backdrop-blur-xl h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.05)]">
                 <div>
                   <p className="text-[12px] uppercase tracking-[0.18em] text-white/50 font-semibold">Premium</p>
                   <div className="mt-3 flex items-end gap-2">
@@ -193,7 +195,7 @@ const ComparateurSection: React.FC = () => {
                   {premiumFeatures.map(f => <FeatureItem key={f} text={f} />)}
                 </ul>
               </div>
-            </ScrollReveal>
+            </div>
 
           </div>
 

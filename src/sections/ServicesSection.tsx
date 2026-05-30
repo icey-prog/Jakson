@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ArrowRight, Car, Bike, Flame, HeartPulse, Home, Scale, HardHat, Truck, Hammer, Plane } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Link } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
+import { useAnimeReveal } from '@/hooks/useAnimeReveal';
 
 export interface ServiceItem {
   icon: LucideIcon;
@@ -17,7 +18,7 @@ export interface ServiceItem {
 export const ALL_SERVICES: ServiceItem[] = [
   {
     icon: Car,
-    title: 'Jackson Automobile',
+    title: 'Jackson Auto Secur',
     description: 'Formule automobile complète pour tous véhicules, options adaptées à votre budget.',
     tag: 'Populaire',
     bgLight: '#e2f6d5', bgDark: '#163300', iconBg: '#14B8A6',
@@ -86,14 +87,36 @@ interface ServiceFeaturedCardProps {
 
 const ServiceFeaturedCard: React.FC<ServiceFeaturedCardProps> = ({ service }) => {
   const Icon = service.icon;
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.transform = `perspective(900px) rotateX(${-y * 7}deg) rotateY(${x * 7}deg) scale(1.025) translateZ(8px)`;
+    el.style.transition = 'transform 0.1s linear';
+  };
+
+  const handleMouseLeave = () => {
+    const el = cardRef.current;
+    if (!el) return;
+    el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) scale(1) translateZ(0)';
+    el.style.transition = 'transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+  };
+
   return (
     <div
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ willChange: 'transform' }}
       className="group relative p-6 rounded-[18px] overflow-hidden cursor-pointer
-        transition-all duration-200 hover:shadow-product
-        border border-apple-hairline hover:border-apple-blue/30"
-      style={{ backgroundColor: '#ffffff' }}
+        border border-apple-hairline hover:border-apple-blue/30
+        bg-white hover:shadow-[0_20px_60px_rgba(15,23,42,0.14)]
+        shadow-[0_4px_24px_rgba(15,23,42,0.07)]"
     >
-      {/* Icon on tinted bg */}
       <div
         className="w-11 h-11 rounded-[11px] flex items-center justify-center mb-4"
         style={{ backgroundColor: service.iconBg + '18' }}
@@ -101,15 +124,18 @@ const ServiceFeaturedCard: React.FC<ServiceFeaturedCardProps> = ({ service }) =>
         <Icon size={20} strokeWidth={1.75} style={{ color: service.iconBg }} />
       </div>
 
-      {/* Tag */}
       {service.tag && (
         <span className="absolute top-4 right-4 text-[12px] font-semibold text-apple-blue tracking-[-0.12px]">
           {service.tag}
         </span>
       )}
 
-      <h3 className="font-body font-semibold text-[17px] text-apple-ink tracking-[-0.374px] leading-[1.24] mb-1.5">{service.title}</h3>
-      <p className="text-[14px] text-apple-ink-48 leading-[1.43] tracking-[-0.224px] mb-5 line-clamp-2">{service.description}</p>
+      <h3 className="font-body font-semibold text-[17px] text-apple-ink tracking-[-0.374px] leading-[1.24] mb-1.5">
+        {service.title}
+      </h3>
+      <p className="text-[14px] text-apple-ink-48 leading-[1.43] tracking-[-0.224px] mb-5 line-clamp-2">
+        {service.description}
+      </p>
 
       <span className="btn-text-link text-[14px] inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-150">
         En savoir plus <ArrowRight size={12} />
@@ -118,44 +144,48 @@ const ServiceFeaturedCard: React.FC<ServiceFeaturedCardProps> = ({ service }) =>
   );
 };
 
-const ServicesSection: React.FC = () => (
-  <section id="services" className="section-padding tile-parchment">
-    <div className="section-container">
-      <div className="section-inner">
+const ServicesSection: React.FC = () => {
+  const gridRef = useAnimeReveal<HTMLDivElement>({ selector: '[data-card]', stagger: 100, translateY: 45 });
 
-        <ScrollReveal className="text-center mb-14">
-          <span className="section-badge mb-4">Nos Solutions</span>
-          <h2 className="section-title mb-4">
-            Chaque risque, un expert humain dédié.
-          </h2>
-          <p className="section-subtitle mx-auto">
-            Nos conseillers — pas des robots — analysent votre situation
-            et vous proposent la couverture exactement adaptée à vos besoins.
-          </p>
-        </ScrollReveal>
+  return (
+    <section id="services" className="section-padding tile-parchment">
+      <div className="section-container">
+        <div className="section-inner">
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 stagger-children">
-          {FEATURED_IDS.map((idx, i) => (
-            <ScrollReveal key={ALL_SERVICES[idx].title} delay={i * 80}>
-              <ServiceFeaturedCard service={ALL_SERVICES[idx]} />
-            </ScrollReveal>
-          ))}
+          <ScrollReveal className="text-center mb-14">
+            <span className="section-badge mb-4">Nos Solutions</span>
+            <h2 className="section-title mb-4">
+              Chaque risque, un expert humain dédié.
+            </h2>
+            <p className="section-subtitle mx-auto">
+              Nos conseillers — pas des robots — analysent votre situation
+              et vous proposent la couverture exactement adaptée à vos besoins.
+            </p>
+          </ScrollReveal>
+
+          <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            {FEATURED_IDS.map((idx) => (
+              <div key={ALL_SERVICES[idx].title} data-card>
+                <ServiceFeaturedCard service={ALL_SERVICES[idx]} />
+              </div>
+            ))}
+          </div>
+
+          <ScrollReveal className="text-center">
+            <p className="text-apple-ink-48 text-[14px] tracking-[-0.224px] mb-4">
+              Et encore 6 autres solutions — auto-moto, transport, chantier, voyage...
+            </p>
+            <Link to="/services"
+              className="inline-flex items-center gap-1.5 px-[22px] py-[11px] bg-transparent border border-apple-blue text-apple-blue text-[17px] font-normal tracking-[-0.374px] rounded-full hover:bg-apple-blue/5 active:scale-95 transition-all duration-150">
+              Voir nos 10 solutions complètes
+              <ArrowRight size={15} />
+            </Link>
+          </ScrollReveal>
+
         </div>
-
-        <ScrollReveal className="text-center">
-          <p className="text-apple-ink-48 text-[14px] tracking-[-0.224px] mb-4">
-            Et encore 6 autres solutions — auto-moto, transport, chantier, voyage...
-          </p>
-          <Link to="/services"
-            className="inline-flex items-center gap-1.5 px-[22px] py-[11px] bg-transparent border border-apple-blue text-apple-blue text-[17px] font-normal tracking-[-0.374px] rounded-full hover:bg-apple-blue/5 active:scale-95 transition-all duration-150">
-            Voir nos 10 solutions complètes
-            <ArrowRight size={15} />
-          </Link>
-        </ScrollReveal>
-
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default ServicesSection;
