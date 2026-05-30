@@ -42,38 +42,39 @@ const Navigation: React.FC = () => {
     }
   };
 
+  // Apple global-nav style: always dark bg, frosted glass on scroll
   const navBg = scrolled
-    ? 'h-[68px] bg-white/90 dark:bg-jackson-night/90 backdrop-blur-2xl border-b border-slate-200/60 dark:border-slate-700/40 shadow-soft'
-    : 'h-[80px] bg-transparent';
+    ? 'h-[44px] bg-black/85 backdrop-blur-[20px] saturate-180 border-b border-white/10'
+    : 'h-[64px] bg-black/70 backdrop-blur-[20px] saturate-180';
 
-  const linkBase = scrolled
-    ? 'text-slate-600 dark:text-white/70 hover:text-jackson-deep dark:hover:text-jackson-vivid hover:bg-jackson-cream dark:hover:bg-slate-800'
-    : 'text-white/80 hover:text-white hover:bg-white/10';
+  // Nav links: Apple 12px, always white on dark nav
+  const linkBase = 'text-[12px] font-normal tracking-[-0.12px] text-white/80 hover:text-white transition-colors duration-150 cursor-pointer';
+  const linkActive = 'text-apple-blue-dark';
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navBg}`}>
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navBg}`}>
         <div className="max-w-container mx-auto h-full flex items-center justify-between px-6 lg:px-[5vw]">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 shrink-0 cursor-pointer">
-            <img src="/assets/logo-jackson.jpg" alt="Jackson Assurances" className="h-10 w-auto rounded-lg" />
-            <span className={`hidden sm:block font-display font-bold text-lg transition-colors duration-300 ${scrolled ? 'text-slate-900 dark:text-white' : 'text-white'}`}>
+          <Link to="/" className="flex items-center gap-2.5 shrink-0 cursor-pointer">
+            <img src="/assets/logo-jackson.jpg" alt="Jackson Assurances" className="h-7 w-auto rounded-[5px]" />
+            <span className="hidden sm:block text-[14px] font-semibold text-white tracking-[-0.224px]">
               Jackson
             </span>
           </Link>
 
-          {/* Desktop links */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* Desktop links — Apple nav-link style: 12px centered row */}
+          <div className="hidden lg:flex items-center gap-6">
             {scrollLinks.map(link => (
               <a key={link.href} href={link.href} onClick={e => handleScrollLink(e, link.href)}
-                className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-250 cursor-pointer ${linkBase}`}>
+                className={linkBase}>
                 {link.label}
               </a>
             ))}
             {pageLinks.map(link => (
               <Link key={link.to} to={link.to}
-                className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-250 cursor-pointer ${linkBase} ${location.pathname === link.to ? 'text-jackson-deep dark:text-jackson-vivid bg-jackson-cream dark:bg-slate-800' : ''}`}>
+                className={`${linkBase} ${location.pathname === link.to ? linkActive : ''}`}>
                 {link.label}
               </Link>
             ))}
@@ -81,66 +82,74 @@ const Navigation: React.FC = () => {
 
           {/* Right side */}
           <div className="hidden lg:flex items-center gap-3">
-            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-              scrolled
-                ? isAvailable ? 'bg-teal-50 dark:bg-teal-900/30 text-jackson-deep dark:text-jackson-vivid' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
-                : isAvailable ? 'bg-white/15 text-white' : 'bg-white/10 text-white/60'
+            {/* Availability badge */}
+            <div className={`flex items-center gap-1.5 text-[12px] tracking-[-0.12px] ${
+              isAvailable ? 'text-white/70' : 'text-white/40'
             }`}>
-              <span className={`w-1.5 h-1.5 rounded-full ${isAvailable ? 'bg-jackson-vivid animate-pulse-dot' : 'bg-slate-400'}`} />
-              {isAvailable ? 'Disponible' : 'Indisponible'}
+              <span className={`w-1.5 h-1.5 rounded-full ${isAvailable ? 'bg-green-400 animate-pulse-dot' : 'bg-white/30'}`} />
+              {isAvailable ? 'Disponible' : 'Fermé'}
             </div>
+
+            {/* Dark mode toggle */}
             <button onClick={toggle}
-              className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-250 cursor-pointer ${
-                scrolled ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700' : 'bg-white/10 text-white hover:bg-white/20'
-              }`} aria-label="Toggle dark mode">
-              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150 cursor-pointer bg-white/10 hover:bg-white/20 text-white"
+              aria-label="Toggle dark mode">
+              {isDark ? <Sun size={14} /> : <Moon size={14} />}
             </button>
-            <a href="#formulaire" onClick={e => handleScrollLink(e, '#formulaire')} className="btn-primary !py-2.5 !px-6 text-sm !rounded-xl">
-              <Phone size={14} /> Devis gratuit
+
+            {/* Primary CTA — Apple blue pill */}
+            <a href="#formulaire" onClick={e => handleScrollLink(e, '#formulaire')}
+              className="inline-flex items-center gap-1.5 px-[18px] py-[8px] bg-apple-blue hover:bg-apple-blue-focus active:scale-95 text-white text-[14px] font-normal tracking-[-0.224px] rounded-full transition-all duration-150 cursor-pointer">
+              <Phone size={12} /> Devis gratuit
             </a>
           </div>
 
           {/* Mobile controls */}
           <div className="flex lg:hidden items-center gap-2">
             <button onClick={toggle}
-              className={`w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer ${scrolled ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-white' : 'bg-white/10 text-white'}`}
+              className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer bg-white/10 text-white"
               aria-label="Toggle dark mode">
-              {isDark ? <Sun size={16} /> : <Moon size={16} />}
+              {isDark ? <Sun size={14} /> : <Moon size={14} />}
             </button>
             <button onClick={() => setMobileOpen(!mobileOpen)}
-              className={`w-9 h-9 rounded-xl flex items-center justify-center cursor-pointer ${scrolled ? 'text-slate-900 dark:text-white' : 'text-white'}`}
+              className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer text-white"
               aria-label="Menu">
-              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — Apple style: slide-in panel */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-80 bg-white dark:bg-jackson-night shadow-float p-8 pt-24">
-            <div className="flex flex-col gap-2">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <div className="absolute right-0 top-0 h-full w-72 bg-apple-tile-1 shadow-float p-8 pt-20">
+            <div className="flex flex-col gap-1">
               {scrollLinks.map(link => (
                 <a key={link.href} href={link.href} onClick={e => handleScrollLink(e, link.href)}
-                  className="text-lg font-medium text-slate-700 dark:text-white px-4 py-3 rounded-xl hover:bg-jackson-cream dark:hover:bg-slate-800 hover:text-jackson-deep dark:hover:text-jackson-vivid transition-all cursor-pointer">
+                  className="text-[17px] font-normal text-white/80 hover:text-white px-4 py-3 rounded-[11px] hover:bg-white/08 transition-all cursor-pointer tracking-[-0.374px]">
                   {link.label}
                 </a>
               ))}
               {pageLinks.map(link => (
                 <Link key={link.to} to={link.to} onClick={() => setMobileOpen(false)}
-                  className={`text-lg font-medium px-4 py-3 rounded-xl transition-all cursor-pointer ${location.pathname === link.to ? 'bg-jackson-cream dark:bg-slate-800 text-jackson-deep dark:text-jackson-vivid' : 'text-slate-700 dark:text-white hover:bg-jackson-cream dark:hover:bg-slate-800 hover:text-jackson-deep dark:hover:text-jackson-vivid'}`}>
+                  className={`text-[17px] font-normal px-4 py-3 rounded-[11px] transition-all cursor-pointer tracking-[-0.374px] ${
+                    location.pathname === link.to
+                      ? 'bg-white/10 text-white'
+                      : 'text-white/80 hover:text-white hover:bg-white/08'
+                  }`}>
                   {link.label}
                 </Link>
               ))}
-              <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium w-fit mb-4 ${isAvailable ? 'bg-teal-50 text-jackson-deep dark:bg-teal-900/30 dark:text-jackson-vivid' : 'bg-slate-100 text-slate-500 dark:bg-slate-800'}`}>
-                  <span className={`w-1.5 h-1.5 rounded-full ${isAvailable ? 'bg-jackson-vivid animate-pulse-dot' : 'bg-slate-400'}`} />
-                  {isAvailable ? 'Conseillers disponibles' : 'Indisponibles'}
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <div className={`flex items-center gap-2 text-[12px] mb-5 ${isAvailable ? 'text-green-400' : 'text-white/40'}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isAvailable ? 'bg-green-400 animate-pulse-dot' : 'bg-white/30'}`} />
+                  {isAvailable ? 'Conseillers disponibles' : 'Conseillers indisponibles'}
                 </div>
               </div>
-              <a href="#formulaire" onClick={e => handleScrollLink(e, '#formulaire')} className="btn-primary text-center !rounded-xl">
+              <a href="#formulaire" onClick={e => handleScrollLink(e, '#formulaire')}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-apple-blue hover:bg-apple-blue-focus text-white text-[17px] font-normal tracking-[-0.374px] rounded-full transition-all active:scale-95 cursor-pointer">
                 Obtenir un devis
               </a>
             </div>

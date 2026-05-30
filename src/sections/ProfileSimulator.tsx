@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Check, GraduationCap, Users, Briefcase, Shield } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
-import SectionLabel from '@/components/SectionLabel';
 import ProfileCardNew from '@/components/ProfileCardNew';
 import type { ProfileData } from '@/components/ProfileCardNew';
 
@@ -95,15 +94,15 @@ const ProfileSimulator: React.FC = () => {
   };
 
   return (
-    <section id="simulateur" className="section-padding bg-white dark:bg-[#0F172A] overflow-hidden">
+    <section id="simulateur" className="section-padding tile-parchment overflow-hidden">
       <div className="section-container">
         <div className="section-inner">
 
           <ScrollReveal className="text-center mb-12">
-            <SectionLabel className="mb-4">Votre Profil</SectionLabel>
-            <h2 className="section-title mb-4">Quelle assurance vous correspond ?</h2>
+            <span className="section-badge mb-4">Votre Profil</span>
+            <h2 className="section-title mb-4">Trouvez votre formule idéale.</h2>
             <p className="section-subtitle mx-auto">
-              Sélectionnez votre profil — nous vous guidons vers vos meilleures solutions.
+              Validée par un conseiller humain en moins de 15 minutes — pas par un robot.
             </p>
           </ScrollReveal>
 
@@ -129,17 +128,17 @@ const ProfileSimulator: React.FC = () => {
             <div className="flex gap-2">
               {profiles.map((_, i) => (
                 <button key={i} onClick={() => { setCurrent(i); setSelected(null); }}
-                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${i === current ? 'w-6 bg-jackson-deep' : 'w-2 bg-slate-200 dark:bg-slate-600 hover:bg-slate-300'}`}
+                  className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${i === current ? 'w-6 bg-apple-blue' : 'w-2 bg-apple-hairline hover:bg-apple-ink-48'}`}
                 />
               ))}
             </div>
             <div className="flex gap-2">
               <button onClick={prev} aria-label="Précédent"
-                className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-white hover:bg-jackson-cream dark:hover:bg-slate-800 hover:border-jackson-deep transition-all cursor-pointer">
+                className="w-10 h-10 rounded-full border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue transition-all cursor-pointer bg-white">
                 <ChevronLeft size={18} />
               </button>
               <button onClick={next} aria-label="Suivant"
-                className="w-10 h-10 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-white hover:bg-jackson-cream dark:hover:bg-slate-800 hover:border-jackson-deep transition-all cursor-pointer">
+                className="w-10 h-10 rounded-full border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue transition-all cursor-pointer bg-white">
                 <ChevronRight size={18} />
               </button>
             </div>
@@ -147,19 +146,20 @@ const ProfileSimulator: React.FC = () => {
 
           {/* Results panel */}
           {selectedProfile && (
-            <div className="mt-8 p-6 md:p-8 rounded-2xl bg-jackson-cream dark:bg-slate-800/60 border border-jackson-deep/10 dark:border-jackson-vivid/10 animate-fade-in-up">
-              <p className="text-xs font-bold text-jackson-deep dark:text-jackson-vivid mb-4 uppercase tracking-widest">
+            <div className="mt-8 p-6 md:p-8 rounded-[18px] bg-white border border-apple-hairline animate-fade-in-up">
+              <p className="text-[12px] font-semibold text-apple-blue mb-4 tracking-[-0.12px] uppercase">
                 Recommandé pour {selectedProfile.title}
               </p>
-              <div className="flex flex-wrap gap-3 mb-6">
+              <div className="flex flex-wrap gap-2.5 mb-6">
                 {selectedProfile.products.map(prod => (
-                  <span key={prod} className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-700 border border-slate-100 dark:border-slate-600 text-sm font-medium text-slate-700 dark:text-white shadow-sm">
-                    <Check size={13} className="text-jackson-deep dark:text-jackson-vivid" />
+                  <span key={prod} className="inline-flex items-center gap-1.5 px-[14px] py-[8px] rounded-[11px] bg-apple-parchment border border-apple-hairline text-[14px] text-apple-ink tracking-[-0.224px]">
+                    <Check size={12} className="text-apple-blue" />
                     {prod}
                   </span>
                 ))}
               </div>
-              <a href="#formulaire" onClick={scrollToForm} className="btn-primary !py-3 !px-6 text-sm !rounded-xl">
+              <a href="#formulaire" onClick={scrollToForm}
+                className="inline-flex items-center gap-1.5 px-[22px] py-[11px] bg-apple-blue hover:bg-apple-blue-focus active:scale-95 text-white text-[17px] font-normal tracking-[-0.374px] rounded-full transition-all duration-150 cursor-pointer">
                 Obtenir mon devis — {selectedProfile.title}
               </a>
             </div>

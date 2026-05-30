@@ -30,35 +30,44 @@ const CTAFinalSection: React.FC = () => {
 
       <div className="relative z-10 max-w-[800px] mx-auto px-6 lg:px-[5vw] text-center">
         <ScrollReveal>
-          <h2 className="section-title text-white mb-6">
-            Prêt à protéger votre avenir ?
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/15 text-white text-[12px] font-normal tracking-[-0.12px] mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse-dot" />
+            Zéro IA — 100% Humain
+          </span>
+          <h2 className="font-display font-semibold text-white mb-6 leading-[1.07] tracking-[-0.28px]"
+            style={{ fontSize: 'clamp(2rem, 5vw, 40px)' }}>
+            Un conseiller humain vous attend.
           </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={150}>
-          <p className="section-subtitle text-white/80 mb-10 mx-auto">
-            Rejoignez les 50 000 familles qui nous font confiance. Votre devis gratuit et sans
-            engagement vous attend.
+          <p className="text-[17px] text-white/75 leading-[1.47] tracking-[-0.374px] mb-10 max-w-[560px] mx-auto">
+            Vos sinistres ne s'expliquent pas par un algorithme.
+            Parlez à un vrai expert — devis gratuit, réponse en moins de 2 minutes.
           </p>
         </ScrollReveal>
 
         <ScrollReveal delay={300}>
-          <a
-            href="#formulaire"
-            onClick={handleClick}
-            className="inline-block px-10 py-4 bg-white text-jackson-deep font-semibold text-lg rounded-btn hover:bg-jackson-light hover:-translate-y-0.5 hover:shadow-[0_4px_24px_rgba(255,255,255,0.2)] transition-all duration-250 cursor-pointer"
-          >
-            Obtenir mon devis maintenant
-          </a>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <a
+              href="#formulaire"
+              onClick={handleClick}
+              className="inline-flex items-center justify-center px-[22px] py-[11px] bg-white text-apple-ink text-[17px] font-normal tracking-[-0.374px] rounded-full hover:bg-apple-parchment active:scale-95 transition-all duration-150 cursor-pointer"
+            >
+              Obtenir mon devis maintenant
+            </a>
+            <a
+              href="tel:+22625380200"
+              className="inline-flex items-center justify-center px-[22px] py-[11px] bg-transparent border border-white/30 hover:border-white/60 text-white text-[17px] font-normal tracking-[-0.374px] rounded-full transition-all duration-150 cursor-pointer"
+            >
+              Appeler un conseiller
+            </a>
+          </div>
         </ScrollReveal>
 
         <ScrollReveal delay={450}>
-          <p className="text-sm text-white/60 mt-5">
-            Ou appelez-nous au{' '}
-            <a href="tel:0123456789" className="text-white font-medium hover:underline">
-              01 23 45 67 89
-            </a>{' '}
-            — Lun-Ven, 8h30-18h30
+          <p className="text-[12px] text-white/50 tracking-[-0.12px] mt-6">
+            Lun-Ven, 8h30-18h30 — Aucun répondeur automatisé, toujours un humain.
           </p>
         </ScrollReveal>
       </div>

@@ -2,15 +2,14 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
-import SectionLabel from '@/components/SectionLabel';
 import AmbientOrb from '@/components/AmbientOrb';
 import TestimonialCard from '@/components/TestimonialCard';
 
 const stats = [
-  { value: 99.9, suffix: '%', label: 'de sinistres traités en moins de 48h' },
-  { value: 50000, suffix: '+', label: 'familles nous font confiance', format: true },
-  { value: 4.8, suffix: '/5', label: 'note moyenne de satisfaction', isDecimal: true },
-  { value: 0, suffix: '24/7', label: 'service d\'assistance disponible', isSpecial: true },
+  { value: 99.9,  suffix: '%',   label: 'de sinistres traités en moins de 48h', isDecimal: true },
+  { value: 50000, suffix: '+',   label: 'clients nous font confiance', format: true },
+  { value: 4.8,   suffix: '/5',  label: 'note moyenne de satisfaction', isDecimal: true },
+  { value: 0,     suffix: ' IA', label: 'Zéro IA — 100% Conseillers humains', isZero: true },
 ];
 
 const testimonials = [
@@ -75,7 +74,7 @@ const ReassuranceSection: React.FC = () => {
 
             setAnimatedStats(
               stats.map((s) => {
-                if (s.isSpecial) return 0;
+                if ((s as any).isZero) return 0;
                 return s.isDecimal ? parseFloat((s.value * eased).toFixed(1)) : Math.round(s.value * eased);
               })
             );
@@ -121,11 +120,9 @@ const ReassuranceSection: React.FC = () => {
 
   const formatStat = (value: number, index: number) => {
     const stat = stats[index];
-    if (stat.isSpecial) return '24/7';
+    if ((stat as any).isZero) return '0';
     if (stat.isDecimal) return value.toFixed(1);
-    if (stat.format && value >= 1000) {
-      return Math.round(value / 1000) + ' 000';
-    }
+    if (stat.format && value >= 1000) return Math.round(value / 1000) + ' 000';
     return value.toString();
   };
 
@@ -133,37 +130,40 @@ const ReassuranceSection: React.FC = () => {
     <section
       id="reassurance"
       ref={sectionRef}
-      className="relative section-padding bg-jackson-cream dark:bg-jackson-night overflow-hidden"
+      className="relative section-padding tile-white overflow-hidden"
     >
-      <AmbientOrb size={300} opacity={0.12} className="-top-20 -left-20" />
-      <AmbientOrb size={300} opacity={0.12} className="-bottom-20 -right-20" />
+      <AmbientOrb size={300} opacity={0.10} className="-top-20 -left-20" />
+      <AmbientOrb size={300} opacity={0.10} className="-bottom-20 -right-20" />
 
       <div className="relative z-10 section-container">
         
         {/* À propos de nous */}
         <ScrollReveal className="mb-16 md:mb-24">
           <div className="max-w-[800px] mx-auto text-center">
-            <SectionLabel className="mb-4">À propos de nous</SectionLabel>
+            <span className="section-badge mb-4">Notre Histoire</span>
             <h2 className="section-title mb-6">Jackson Assurances</h2>
-            <p className="text-lg md:text-xl text-slate-700 dark:text-white/80 leading-relaxed mb-6">
-              Créée en 2013 par des promoteurs nationaux, Jackson Assurances est spécialisée dans toutes les branches d’assurance non Vie (Incendie, Accidents, Risques Divers et Transport). Notre équipe dynamique et experte met son savoir-faire à votre service pour vous garantir la meilleure protection.
+            <p className="text-[17px] text-apple-ink-48 leading-[1.47] tracking-[-0.374px] mb-6">
+              Créée en 2013, Jackson Assurances est spécialisée dans toutes les branches d'assurance non Vie.
+              Notre philosophie : zéro IA, zéro réponse automatisée. Chaque client est suivi par un conseiller
+              dédié qui connaît votre dossier par cœur.
             </p>
-            <Link to="/about" className="inline-flex items-center gap-2 font-semibold text-jackson-deep dark:text-jackson-vivid hover:underline">
-              Découvrir notre histoire <ChevronRight size={18} />
+            <Link to="/about" className="btn-text-link inline-flex items-center gap-1.5">
+              Découvrir notre histoire <ChevronRight size={16} />
             </Link>
           </div>
         </ScrollReveal>
 
         {/* Stats Grid */}
         <ScrollReveal className="mb-16 md:mb-24">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-container mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-container mx-auto">
             {stats.map((stat, i) => (
-              <div key={stat.label} className="text-center p-6 premium-card bg-white/50 backdrop-blur-sm dark:bg-slate-800/50">
-                <p className="font-display text-[40px] md:text-[56px] font-bold text-jackson-deep dark:text-jackson-vivid leading-none mb-3">
+              <div key={stat.label} className="text-center p-6 bg-apple-parchment rounded-[18px] border border-apple-hairline">
+                <p className="font-display font-semibold text-apple-blue leading-[1.07] tracking-[-0.28px] mb-2"
+                  style={{ fontSize: 'clamp(2rem, 4vw, 40px)' }}>
                   {formatStat(animatedStats[i], i)}
-                  {!stat.isSpecial && stat.suffix}
+                  <span className="text-[0.6em] align-super">{!(stat as any).isZero && stat.suffix}</span>
                 </p>
-                <p className="text-[15px] font-medium text-slate-600 dark:text-white/70">
+                <p className="text-[14px] text-apple-ink-48 leading-[1.43] tracking-[-0.224px]">
                   {stat.label}
                 </p>
               </div>
@@ -174,12 +174,10 @@ const ReassuranceSection: React.FC = () => {
         <div className="section-inner">
           {/* Testimonials Title */}
           <ScrollReveal className="text-center mb-16">
-            <SectionLabel className="mb-4">Témoignages</SectionLabel>
-            <h2 className="section-title mb-4">
-              Ils nous font confiance
-            </h2>
+            <span className="section-badge mb-4">Témoignages</span>
+            <h2 className="section-title mb-4">Ils nous font confiance</h2>
             <p className="section-subtitle mx-auto">
-              Découvrez ce que nos clients disent de leur expérience avec Jackson Assurances.
+              De vraies paroles, de vrais clients — aucun contenu généré par IA.
             </p>
           </ScrollReveal>
 
@@ -189,7 +187,7 @@ const ReassuranceSection: React.FC = () => {
           <div className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-10">
             <button
               onClick={prevSlide}
-              className="w-10 h-10 rounded-full bg-white dark:bg-slate-700 border border-jackson-deep/10 dark:border-white/10 flex items-center justify-center text-jackson-night dark:text-white hover:bg-jackson-light dark:hover:bg-slate-600 transition-colors shadow-card cursor-pointer"
+              className="w-10 h-10 rounded-full bg-white border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue transition-colors shadow-product cursor-pointer"
               aria-label="Témoignage précédent"
             >
               <ChevronLeft size={18} />
@@ -198,7 +196,7 @@ const ReassuranceSection: React.FC = () => {
           <div className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-10">
             <button
               onClick={nextSlide}
-              className="w-10 h-10 rounded-full bg-white dark:bg-slate-700 border border-jackson-deep/10 dark:border-white/10 flex items-center justify-center text-jackson-night dark:text-white hover:bg-jackson-light dark:hover:bg-slate-600 transition-colors shadow-card cursor-pointer"
+              className="w-10 h-10 rounded-full bg-white border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue transition-colors shadow-product cursor-pointer"
               aria-label="Témoignage suivant"
             >
               <ChevronRight size={18} />
@@ -260,7 +258,7 @@ const ReassuranceSection: React.FC = () => {
                 key={i}
                 onClick={() => setCurrentSlide(i)}
                 className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
-                  i === currentSlide ? 'bg-jackson-deep dark:bg-jackson-vivid' : 'bg-jackson-deep/20 dark:bg-white/20'
+                  i === currentSlide ? 'bg-apple-blue' : 'bg-apple-hairline'
                 }`}
                 aria-label={`Slide ${i + 1}`}
               />
