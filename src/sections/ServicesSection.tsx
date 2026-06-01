@@ -225,7 +225,6 @@ const ServicesSection: React.FC = () => {
     typeof window !== 'undefined' && window.innerWidth >= 1024
   );
   const total = FEATURED_IDS.length;
-  const angleStep = 360 / total;
   const sectionRef = useRef<HTMLElement>(null);
 
   // Track viewport
@@ -236,96 +235,82 @@ const ServicesSection: React.FC = () => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // ── Orbital tilt + anime.js continuous drift ────────────
-  const ringRef = useRef<HTMLDivElement>(null);
+  // ── Stack pile animée (anime.js) ────────────────────────
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const driftRef = useRef<{ value: number }>({ value: 0 });
   const isHoveringRef = useRef(false);
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const autoCycleRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Apply tilt + rotation + counter-rotate cards
-  const applyTransforms = useCallback((ringAngle: number) => {
-    const ring = ringRef.current;
-    if (!ring) return;
-    ring.style.transform = `rotateX(-22deg) rotateY(${ringAngle}deg)`;
+  // Apply stack transforms — active on top, others stacked behind
+  const applyStack = useCallback((activeIdx: number, animated = true) => {
     cardRefs.current.forEach((el, i) => {
       if (!el) return;
-      const cardAngle = i * angleStep;
-      const inner = el.firstElementChild as HTMLElement | null;
-      if (inner) {
-        inner.style.transform = `rotateY(${-ringAngle - cardAngle}deg) rotateX(22deg)`;
+      // Relative offset in cyclic stack
+      // Behind: positive offset (1, 2, 3...)
+      // Active: 0
+      const rel = (i - activeIdx + total) % total;
+      // rel: 0 (active), 1 (next behind), 2, 3 (deepest)
+      const translateY = rel === 0 ? 0 : 18 * rel;
+      const translateX = rel === 0 ? 0 : 6 * rel;
+      const scale = rel === 0 ? 1 : 1 - 0.05 * rel;
+      const opacity = rel >= total - 1 ? 0 : rel === 0 ? 1 : 0.85 - 0.15 * rel;
+      const rotate = rel === 0 ? 0 : -2 * rel;
+      const zIndex = total - rel;
+
+      if (animated) {
+        anime.remove(el);
+        anime({
+          targets: el,
+          translateY,
+          translateX,
+          scale,
+          opacity,
+          rotate,
+          duration: 700,
+          easing: 'cubicBezier(0.22, 1, 0.36, 1)',
+        });
+        el.style.zIndex = String(zIndex);
+      } else {
+        el.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale}) rotate(${rotate}deg)`;
+        el.style.opacity = String(opacity);
+        el.style.zIndex = String(zIndex);
       }
     });
-  }, [angleStep]);
+  }, [total]);
 
-  // Helper: start continuous drift from current value
-  const startDrift = useCallback(() => {
-    anime.remove(driftRef.current);
-    const startValue = driftRef.current.value;
-    anime({
-      targets: driftRef.current,
-      value: startValue + 360,
-      duration: 32000,
-      easing: 'linear',
-      loop: true,
-      update: () => {
-        if (isHoveringRef.current) return;
-        applyTransforms(driftRef.current.value % 360);
-      },
-    });
-  }, [applyTransforms]);
-
-  // Mount / mode change → init drift baseline from current active
+  // Mount / mode change → init stack
   useEffect(() => {
-    if (!isDesktop) {
-      anime.remove(driftRef.current);
-      return;
-    }
-    // Sync baseline to current active so no fight on first paint
-    driftRef.current.value = -active * angleStep;
-    applyTransforms(driftRef.current.value % 360);
-    startDrift();
+    if (!isDesktop) return;
+    applyStack(active, false);
     return () => {
-      anime.remove(driftRef.current);
-      if (resumeTimeoutRef.current) {
-        clearTimeout(resumeTimeoutRef.current);
-        resumeTimeoutRef.current = null;
+      cardRefs.current.forEach(el => el && anime.remove(el));
+      if (autoCycleRef.current) {
+        clearInterval(autoCycleRef.current);
+        autoCycleRef.current = null;
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDesktop]);
 
-  // On active change (dots/chevrons), cancel drift + snap + restart drift
+  // On active change, animate stack
   useEffect(() => {
     if (!isDesktop) return;
-    // Cancel any pending resume + ALL animations on driftRef
-    if (resumeTimeoutRef.current) {
-      clearTimeout(resumeTimeoutRef.current);
-      resumeTimeoutRef.current = null;
-    }
-    anime.remove(driftRef.current);
-    isHoveringRef.current = true;
+    applyStack(active, true);
+  }, [active, isDesktop, applyStack]);
 
-    const target = -active * angleStep;
-    const current = driftRef.current.value;
-    const diff = ((target - current) % 360 + 540) % 360 - 180;
-
-    anime({
-      targets: driftRef.current,
-      value: current + diff,
-      duration: 900,
-      easing: 'cubicBezier(0.22, 1, 0.36, 1)',
-      update: () => {
-        applyTransforms(driftRef.current.value % 360);
-      },
-      complete: () => {
-        resumeTimeoutRef.current = setTimeout(() => {
-          isHoveringRef.current = false;
-          startDrift();
-        }, 800);
-      },
-    });
-  }, [active, isDesktop, angleStep, applyTransforms, startDrift]);
+  // Auto-cycle every 5s (hover pauses)
+  useEffect(() => {
+    if (!isDesktop) return;
+    autoCycleRef.current = setInterval(() => {
+      if (isHoveringRef.current) return;
+      setActive(prev => (prev + 1) % total);
+    }, 5000);
+    return () => {
+      if (autoCycleRef.current) {
+        clearInterval(autoCycleRef.current);
+        autoCycleRef.current = null;
+      }
+    };
+  }, [isDesktop, total]);
 
   // Mobile carousel ref
   const mobileScrollRef = useRef<HTMLDivElement>(null);
@@ -387,73 +372,34 @@ const ServicesSection: React.FC = () => {
                 <>
                   <div
                     className="relative mx-auto"
-                    style={{
-                      width: '380px',
-                      height: '460px',
-                      perspective: '1600px',
-                    }}
+                    style={{ width: '380px', height: '500px' }}
                     onMouseEnter={() => { isHoveringRef.current = true; }}
                     onMouseLeave={() => { isHoveringRef.current = false; }}
                   >
-                    {/* Saturn-style horizontal disc shadow under orbit */}
+                    {/* Stacked cards — anime.js driven */}
+                    {FEATURED_IDS.map((id, i) => (
+                      <div
+                        key={id}
+                        ref={el => { cardRefs.current[i] = el; }}
+                        className="absolute inset-0 cursor-pointer"
+                        style={{ willChange: 'transform, opacity' }}
+                        onClick={() => goTo(i)}
+                      >
+                        <OrbitCard
+                          service={ALL_SERVICES[id]}
+                          idx={i}
+                          total={total}
+                          isActive={i === active}
+                        />
+                      </div>
+                    ))}
+
+                    {/* Soft floor shadow under stack */}
                     <div
-                      className="absolute left-1/2 bottom-[-30px] -translate-x-1/2 w-[420px] h-[40px] pointer-events-none"
+                      className="absolute left-1/2 bottom-[-24px] -translate-x-1/2 w-[320px] h-[28px] pointer-events-none"
                       style={{
-                        background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(15,118,110,0.22), transparent 70%)',
+                        background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(15,118,110,0.20), transparent 70%)',
                         filter: 'blur(8px)',
-                      }}
-                    />
-
-                    {/* Orbit ring — tilted, driven by anime.js */}
-                    <div
-                      ref={ringRef}
-                      className="absolute inset-0"
-                      style={{
-                        transformStyle: 'preserve-3d',
-                        transform: 'rotateX(-22deg) rotateY(0deg)',
-                        willChange: 'transform',
-                      }}
-                    >
-                      {FEATURED_IDS.map((id, i) => {
-                        const angle = i * angleStep;
-                        const radius = 340;
-                        return (
-                          <div
-                            key={id}
-                            ref={el => { cardRefs.current[i] = el; }}
-                            className="absolute inset-0"
-                            style={{
-                              transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
-                              transformStyle: 'preserve-3d',
-                            }}
-                          >
-                            <div
-                              className="relative w-full h-full transition-all duration-500"
-                              style={{
-                                willChange: 'transform',
-                                transform: 'rotateY(0deg) rotateX(22deg)',
-                                opacity: i === active ? 1 : 0.55,
-                                filter: i === active ? 'none' : 'saturate(0.7)',
-                              }}
-                            >
-                              <OrbitCard
-                                service={ALL_SERVICES[id]}
-                                idx={i}
-                                total={total}
-                                isActive={i === active}
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-
-                    {/* Center radial glow */}
-                    <div
-                      className="absolute inset-0 pointer-events-none"
-                      style={{
-                        background:
-                          'radial-gradient(circle at 50% 50%, rgba(15,118,110,0.10) 0%, transparent 55%)',
                       }}
                     />
                   </div>
