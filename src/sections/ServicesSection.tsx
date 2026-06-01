@@ -220,9 +220,13 @@ const DetailPanel: React.FC<{ service: ServiceItem; idx: number }> = ({ service,
 
 const ServicesSection: React.FC = () => {
   const [active, setActive] = useState(0);
-  const [isDesktop, setIsDesktop] = useState(false);
+  // SSR-safe init — prevents initial layout flash desktop→mobile→desktop
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' && window.innerWidth >= 1024
+  );
   const total = FEATURED_IDS.length;
   const angleStep = 360 / total;
+  const sectionRef = useRef<HTMLElement>(null);
 
   // Track viewport
   useEffect(() => {
@@ -232,45 +236,21 @@ const ServicesSection: React.FC = () => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  // Desktop: scroll-driven active idx
-  const sectionRef = useRef<HTMLElement>(null);
-  useEffect(() => {
-    if (!isDesktop) return;
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const handler = () => {
-      const rect = el.getBoundingClientRect();
-      const winH = window.innerHeight;
-      const totalScroll = rect.height - winH;
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(0.999, scrolled / totalScroll));
-      const idx = Math.min(total - 1, Math.floor(progress * total));
-      setActive(idx);
-    };
-    handler();
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
-  }, [isDesktop, total]);
-
   // ── Orbital tilt + anime.js continuous drift ────────────
   const ringRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const driftRef = useRef<{ value: number }>({ value: 0 });
-  const animRef = useRef<anime.AnimeInstance | null>(null);
   const isHoveringRef = useRef(false);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Apply tilt + rotation + counter-rotate cards
   const applyTransforms = useCallback((ringAngle: number) => {
     const ring = ringRef.current;
     if (!ring) return;
     ring.style.transform = `rotateX(-22deg) rotateY(${ringAngle}deg)`;
-    // Counter-rotate each card so its face stays toward viewer
     cardRefs.current.forEach((el, i) => {
       if (!el) return;
       const cardAngle = i * angleStep;
-      // Card upright: cancel ring rotateY by -ringAngle, but keep its position by rotateY(cardAngle)translateZ
-      // Outer wrapper handles position; inner content counter-rotates
       const inner = el.firstElementChild as HTMLElement | null;
       if (inner) {
         inner.style.transform = `rotateY(${-ringAngle - cardAngle}deg) rotateX(22deg)`;
@@ -278,14 +258,13 @@ const ServicesSection: React.FC = () => {
     });
   }, [angleStep]);
 
-  // Continuous anime.js drift (desktop only)
-  useEffect(() => {
-    if (!isDesktop) return;
-    // Clean previous
-    animRef.current?.pause();
-    animRef.current = anime({
+  // Helper: start continuous drift from current value
+  const startDrift = useCallback(() => {
+    anime.remove(driftRef.current);
+    const startValue = driftRef.current.value;
+    anime({
       targets: driftRef.current,
-      value: driftRef.current.value + 360,
+      value: startValue + 360,
       duration: 32000,
       easing: 'linear',
       loop: true,
@@ -294,19 +273,43 @@ const ServicesSection: React.FC = () => {
         applyTransforms(driftRef.current.value % 360);
       },
     });
-    return () => {
-      animRef.current?.pause();
-    };
-  }, [isDesktop, applyTransforms]);
+  }, [applyTransforms]);
 
-  // On active change, snap-to-front via anime.js
+  // Mount / mode change → init drift baseline from current active
+  useEffect(() => {
+    if (!isDesktop) {
+      anime.remove(driftRef.current);
+      return;
+    }
+    // Sync baseline to current active so no fight on first paint
+    driftRef.current.value = -active * angleStep;
+    applyTransforms(driftRef.current.value % 360);
+    startDrift();
+    return () => {
+      anime.remove(driftRef.current);
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+        resumeTimeoutRef.current = null;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDesktop]);
+
+  // On active change (dots/chevrons), cancel drift + snap + restart drift
   useEffect(() => {
     if (!isDesktop) return;
+    // Cancel any pending resume + ALL animations on driftRef
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+    anime.remove(driftRef.current);
     isHoveringRef.current = true;
+
     const target = -active * angleStep;
-    // Normalize current drift to nearest equivalent for shortest path
     const current = driftRef.current.value;
-    let diff = ((target - current) % 360 + 540) % 360 - 180;
+    const diff = ((target - current) % 360 + 540) % 360 - 180;
+
     anime({
       targets: driftRef.current,
       value: current + diff,
@@ -316,13 +319,13 @@ const ServicesSection: React.FC = () => {
         applyTransforms(driftRef.current.value % 360);
       },
       complete: () => {
-        // Resume drift after settle
-        setTimeout(() => {
+        resumeTimeoutRef.current = setTimeout(() => {
           isHoveringRef.current = false;
-        }, 600);
+          startDrift();
+        }, 800);
       },
     });
-  }, [active, isDesktop, angleStep, applyTransforms]);
+  }, [active, isDesktop, angleStep, applyTransforms, startDrift]);
 
   // Mobile carousel ref
   const mobileScrollRef = useRef<HTMLDivElement>(null);
@@ -344,20 +347,13 @@ const ServicesSection: React.FC = () => {
 
   const goTo = (idx: number) => {
     setActive(idx);
-    if (isDesktop) {
-      const el = sectionRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const totalScroll = rect.height - window.innerHeight;
-      const targetProgress = (idx + 0.5) / total;
-      const targetScroll = window.scrollY + rect.top + totalScroll * targetProgress;
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-    } else {
+    if (!isDesktop) {
       const el = mobileScrollRef.current;
       if (!el) return;
       const card = el.children[idx] as HTMLElement;
       if (card) el.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
     }
+    // Desktop: orbit anime.js snap handled by useEffect on `active` change
   };
 
   const activeService = ALL_SERVICES[FEATURED_IDS[active]];
@@ -366,16 +362,9 @@ const ServicesSection: React.FC = () => {
     <section
       id="services"
       ref={sectionRef}
-      className="relative tile-parchment"
-      style={isDesktop ? { height: `${total * 100}vh` } : undefined}
+      className="relative tile-parchment overflow-hidden"
     >
-      <div
-        className={
-          isDesktop
-            ? 'sticky top-0 h-screen flex items-center overflow-hidden'
-            : 'py-16 overflow-hidden'
-        }
-      >
+      <div className={isDesktop ? 'py-24 lg:py-32' : 'py-16'}>
         <div className="w-full section-container">
 
           {/* Header — mobile only above carousel */}
