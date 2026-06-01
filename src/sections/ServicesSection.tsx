@@ -361,7 +361,7 @@ const ServicesSection: React.FC = () => {
               <div className="max-w-[560px]">
                 <span className="section-badge mb-4">Nos Solutions</span>
                 <h2 className="section-title mb-8" style={{ fontSize: 'clamp(1.5rem, 3vw, 28px)', textAlign: 'left' }}>
-                  Chaque risque, un expert humain dédié.
+                  Une couverture pour chaque besoin.
                 </h2>
 
                 <DetailPanel service={activeService} idx={active} />

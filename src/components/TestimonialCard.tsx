@@ -10,7 +10,7 @@ interface TestimonialCardProps {
   className?: string;
 }
 
-/** Avatar initial fallback — évite la stock photo "trop IA". */
+/** Avatar à partir des initiales — alternative à la photo. */
 const InitialAvatar: React.FC<{ name: string; color: string }> = ({ name, color }) => {
   const initials = name.split(' ').map(p => p[0]).slice(0, 2).join('');
   return (

@@ -64,7 +64,7 @@ const HeroSection: React.FC = () => {
   };
 
   // Headline split into words for stagger animation
-  const headlineWords = ['Assurances', '100% Humaines.', 'Zéro algorithme,', 'zéro robot.'];
+  const headlineWords = ['Assurer', 'ce qui', 'compte', 'pour vous.'];
 
   return (
     <section
@@ -96,13 +96,13 @@ const HeroSection: React.FC = () => {
       <div className="relative z-10 flex-1 flex items-center px-6 lg:px-[5vw] pt-36 pb-12">
         <div className="max-w-[760px]">
 
-          {/* Anti-IA badge */}
+          {/* Availability badge */}
           <div ref={badgeRef} className="mb-8 opacity-0">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-xl border border-white/15 text-white text-[12px] font-normal tracking-[-0.12px]">
               <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse-dot" />
               {isAvailable
-                ? 'Vrais conseillers disponibles maintenant'
-                : 'Aucune IA — de vrais experts disponibles lun-ven 7h30-16h30, sam 8h-12h'}
+                ? 'Conseillers disponibles · Ouaga & Bobo'
+                : 'Lun-Ven 7h30-16h30 · Sam 8h-12h'}
             </span>
           </div>
 
@@ -124,8 +124,8 @@ const HeroSection: React.FC = () => {
             ref={subtitleRef}
             className="text-[17px] text-white/75 leading-[1.47] tracking-[-0.374px] max-w-[600px] mb-10 opacity-0"
           >
-            Depuis 2013, Jackson Assurances place l'humain au cœur de chaque contrat.
-            Vos sinistres sont traités par de vrais experts — pas par un chatbot, pas par un algorithme.
+            Depuis 2013 à Ouagadougou, Jackson Assurances couvre votre véhicule, votre habitation
+            et votre activité — avec un conseiller dédié et un règlement rapide des sinistres.
           </p>
 
           {/* CTAs — Apple two-pill grammar */}

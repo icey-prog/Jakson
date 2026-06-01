@@ -36,14 +36,14 @@ const CTAFinalSection: React.FC = () => {
           </span>
           <h2 className="font-display font-semibold text-white mb-6 leading-[1.07] tracking-[-0.28px]"
             style={{ fontSize: 'clamp(2rem, 5vw, 40px)' }}>
-            Un conseiller humain vous attend.
+            Un sinistre, un projet, une question.
           </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={150}>
           <p className="text-[17px] text-white/75 leading-[1.47] tracking-[-0.374px] mb-10 max-w-[560px] mx-auto">
-            Vos sinistres ne s'expliquent pas par un algorithme.
-            Parlez à un vrai expert — devis gratuit, réponse en moins de 2 minutes.
+            Joignez votre conseiller Jackson par téléphone ou en agence.
+            Devis gratuit, réponse sous 24h, prise en charge rapide.
           </p>
         </ScrollReveal>
 
@@ -67,7 +67,7 @@ const CTAFinalSection: React.FC = () => {
 
         <ScrollReveal delay={450}>
           <p className="text-[12px] text-white/50 tracking-[-0.12px] mt-6">
-            Lun-Ven 7h30-16h30 · Sam 8h-12h — Aucun répondeur automatisé, toujours un humain.
+            Lun-Ven 7h30-16h30 · Sam 8h-12h — Patte d'Oie (Ouaga) & Bobo-Dioulasso.
           </p>
         </ScrollReveal>
       </div>

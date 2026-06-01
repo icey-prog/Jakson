@@ -16,7 +16,7 @@ const stats = [
 const testimonials = [
   {
     quote:
-      "Après mon accident sur la route de Bobo, j'ai été pris en charge en moins de 48h. Mon conseiller m'a appelé personnellement, pas un email automatique.",
+      "Après mon accident sur la route de Bobo, j'ai été pris en charge en moins de 48h. Mon conseiller a tout coordonné avec le garage, je n'ai eu qu'à signer.",
     name: 'Issouf Ouédraogo',
     status: 'Client Auto Secur',
     city: 'Ouagadougou',

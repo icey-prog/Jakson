@@ -67,9 +67,9 @@ const ComparateurSection: React.FC = () => {
           {/* Header */}
           <ScrollReveal className="text-center mb-12">
             <span className="section-badge mb-4">Tarifs</span>
-            <h2 className="section-title text-white mb-4">Trois formules, zéro automatisation.</h2>
+            <h2 className="section-title text-white mb-4">Trois formules, votre budget.</h2>
             <p className="section-subtitle text-white/60 mx-auto">
-              Chaque formule inclut un conseiller humain dédié — pas un chatbot, pas un formulaire laissé sans réponse.
+              Choisissez la couverture qui vous correspond. Conseiller dédié, devis sous 24h, sans engagement.
             </p>
 
             {/* Toggle mensuel / annuel */}
@@ -205,7 +205,7 @@ const ComparateurSection: React.FC = () => {
               Tous les tarifs sont indicatifs · Devis gratuit et sans engagement · Paiement mensuel ou annuel
             </p>
             <p className="text-[17px] text-white/60 tracking-[-0.374px] mb-5">
-              Besoin d'aide pour choisir ? Un vrai conseiller — pas un chatbot — vous guide gratuitement.
+              Hésitation entre deux formules ? Un conseiller vous guide gratuitement.
             </p>
             <Link to="/services"
               className="btn-text-link-dark inline-flex items-center gap-1.5 text-[17px]">

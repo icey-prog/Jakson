@@ -150,7 +150,7 @@ const ProfileSimulator: React.FC = () => {
             <span className="section-badge mb-4">Votre Profil</span>
             <h2 className="section-title mb-4">Trouvez votre formule idéale.</h2>
             <p className="section-subtitle mx-auto">
-              Validée par un conseiller humain en moins de 15 minutes — pas par un robot.
+              Validée par votre conseiller en moins de 15 minutes. Devis sans engagement.
             </p>
           </ScrollReveal>
 
