@@ -22,6 +22,13 @@ export function useAnimeReveal<T extends HTMLElement>(opts: AnimeRevealOptions =
 
     if (!targets.length) return;
 
+    // Respect prefers-reduced-motion — skip animation, just show
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      anime.set(targets, { opacity: 1, translateY: 0, scale: 1 });
+      return;
+    }
+
     anime.set(targets, { opacity: 0, translateY: opts.translateY ?? 50, scale: 0.97 });
 
     const observer = new IntersectionObserver(

@@ -10,14 +10,18 @@ const profiles: ProfileData[] = [
     title: 'Étudiant',
     tagline: 'Moins de 25 ans',
     description: 'Solutions économiques adaptées à votre budget et à votre mobilité étudiante.',
-    image: '/assets/profile-etudiant.jpg',
+    image: '/assets/profile-etudiant.jpg', // L'image 3.png
     illustrationBg: '#e8ecff',
     priceLabel: 'Dès 3 000 FCFA / mois',
     stat1: { label: 'Produits', value: '3' },
     stat2: { label: 'Budget', value: 'Éco.' },
     icon: GraduationCap,
     badge: 'Populaire',
-    accentColor: '#0F766E',
+    // Couleur d'accent inspirée de la pièce d'or et de l'épargne.
+    accentColor: '#F5A623',
+    // Gradient de carte inspiré des tons de l'arrière-plan de l'image 3.png.
+    cardBg: '#0E1128',
+    cardBgGradient: 'linear-gradient(160deg, #0E1128 0%, #1A237E 100%)', // Bleu profond vers bleu royal.
     products: ['Individuelle Accident', 'Responsabilité Civile', 'Assurance Voyage'],
   },
   {
@@ -25,13 +29,17 @@ const profiles: ProfileData[] = [
     title: 'Famille',
     tagline: 'Parents avec enfants',
     description: 'Couverture complète pour protéger chaque membre de votre foyer au quotidien.',
-    image: '/assets/profile-famille.jpg',
-    illustrationBg: '#f0fdf4',
+    image: '/assets/profile-famille.jpg', // L'image 1.png
+    illustrationBg: '#fdfce8',
     priceLabel: 'Dès 12 000 FCFA / mois',
     stat1: { label: 'Produits', value: '5' },
     stat2: { label: 'Budget', value: 'Moyen' },
     icon: Users,
-    accentColor: '#0369A1',
+    // Couleur d'accent inspirée de la robe orange et de la main corail.
+    accentColor: '#FF8C00',
+    // Gradient de carte inspiré de la pelouse et de la barrière d'or.
+    cardBg: '#3B5323',
+    cardBgGradient: 'linear-gradient(160deg, #3B5323 0%, #A5B35C 100%)', // Vert olive profond vers or vert doux.
     products: ['Multirisque Habitation', 'Individuelle Accident', 'Assurance Auto', 'RC Vie Privée', 'Assurance Voyage'],
   },
   {
@@ -39,13 +47,17 @@ const profiles: ProfileData[] = [
     title: 'Professionnel',
     tagline: 'Indépendant ou salarié',
     description: 'Protégez votre activité, vos biens professionnels et votre responsabilité.',
-    image: '/assets/profile-pro.jpg',
+    image: '/assets/profile-pro.jpg', // L'image 2.png
     illustrationBg: '#f0f9ff',
     priceLabel: 'Dès 20 000 FCFA / mois',
     stat1: { label: 'Produits', value: '6' },
     stat2: { label: 'Budget', value: 'Pro' },
     icon: Briefcase,
-    accentColor: '#7C3AED',
+    // Couleur d'accent inspirée de la peau corail et des pions rouges/orange.
+    accentColor: '#FF6F61',
+    // Gradient de carte inspiré du bleu du plateau de jeu et de l'arrière-plan.
+    cardBg: '#0A2351',
+    cardBgGradient: 'linear-gradient(160deg, #0A2351 0%, #1565C0 100%)', // Bleu marine profond vers bleu royal vif.
     products: ['RC Décennale', 'Tous Risques Chantier', 'Transport Marchandises', 'Incendie', 'Individuelle Accident', 'RC Pro'],
   },
   {
@@ -53,13 +65,17 @@ const profiles: ProfileData[] = [
     title: 'Senior',
     tagline: 'Plus de 60 ans',
     description: 'Sérénité et protection premium adaptées à votre retraite et votre patrimoine.',
-    image: '/assets/profile-senior.jpg',
+    image: '/assets/profile-senior.jpg', // L'image 0.png
     illustrationBg: '#fefce8',
     priceLabel: 'Dès 8 000 FCFA / mois',
     stat1: { label: 'Produits', value: '4' },
     stat2: { label: 'Budget', value: 'Confort' },
     icon: Shield,
-    accentColor: '#B45309',
+    // Couleur d'accent inspirée de la peau corail douce et de la chaise rose.
+    accentColor: '#FF7F50',
+    // Gradient de carte inspiré de la pelouse et du bureau en or/jaune.
+    cardBg: '#064E3B',
+    cardBgGradient: 'linear-gradient(160deg, #064E3B 0%, #B8860B 100%)', // Vert sapin profond vers or patiné.
     products: ['Multirisque Habitation', 'Individuelle Accident', 'RC Vie Privée', 'Assurance Voyage'],
   },
 ];
@@ -141,12 +157,12 @@ const ProfileSimulator: React.FC = () => {
           {/* Carousel — CSS scroll-snap, no JS transform */}
           <div
             ref={scrollRef}
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex items-stretch gap-5 overflow-x-auto snap-x snap-mandatory pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {profiles.map((p, i) => (
               <div
                 key={p.id}
-                className="snap-start shrink-0 w-[min(320px,82vw)]"
+                className="snap-start shrink-0 w-[min(320px,82vw)] flex"
               >
                 <ProfileCardNew
                   profile={p}
@@ -178,7 +194,7 @@ const ProfileSimulator: React.FC = () => {
                 onClick={prev}
                 disabled={current === 0}
                 aria-label="Précédent"
-                className="w-10 h-10 rounded-full border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer bg-white"
+                className="w-11 h-11 rounded-full border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer bg-white"
               >
                 <ChevronLeft size={18} />
               </button>
@@ -186,7 +202,7 @@ const ProfileSimulator: React.FC = () => {
                 onClick={next}
                 disabled={current === profiles.length - 1}
                 aria-label="Suivant"
-                className="w-10 h-10 rounded-full border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer bg-white"
+                className="w-11 h-11 rounded-full border border-apple-hairline flex items-center justify-center text-apple-ink hover:border-apple-blue hover:text-apple-blue disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer bg-white"
               >
                 <ChevronRight size={18} />
               </button>

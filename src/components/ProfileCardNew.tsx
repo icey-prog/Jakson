@@ -14,6 +14,10 @@ export interface ProfileData {
   icon: LucideIcon;
   badge?: string;
   accentColor: string;
+  /** Couleur sombre du footer card — extraite/inspirée de la photo profil */
+  cardBg: string;
+  /** Gradient secondaire pour fade photo→footer */
+  cardBgGradient?: string;
   products: string[];
 }
 
@@ -53,6 +57,7 @@ const ProfileCardNew: React.FC<ProfileCardNewProps> = ({ profile, isActive, onCl
       style={{ willChange: 'transform' }}
       className={`
         relative rounded-[28px] overflow-hidden cursor-pointer select-none
+        w-full flex flex-col
         ${isActive
           ? 'shadow-[0_24px_60px_rgba(15,118,110,0.35),0_0_0_2.5px_#0F766E]'
           : 'shadow-[0_8px_32px_rgba(15,23,42,0.18)]'
@@ -68,7 +73,10 @@ const ProfileCardNew: React.FC<ProfileCardNewProps> = ({ profile, isActive, onCl
           loading="lazy"
         />
 
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0f1923] to-transparent" />
+        <div
+          className="absolute inset-x-0 bottom-0 h-24"
+          style={{ background: `linear-gradient(to top, ${profile.cardBg}, transparent)` }}
+        />
 
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
           <span className="w-4 h-1.5 rounded-full bg-white" />
@@ -101,8 +109,13 @@ const ProfileCardNew: React.FC<ProfileCardNewProps> = ({ profile, isActive, onCl
         </div>
       </div>
 
-      {/* ── Dark content ── */}
-      <div className="bg-[#0f1923] px-5 pt-4 pb-5">
+      {/* ── Colored content ── */}
+      <div
+        className="px-5 pt-4 pb-5 flex flex-col flex-1"
+        style={{
+          background: profile.cardBgGradient ?? profile.cardBg,
+        }}
+      >
         <div className="flex items-start justify-between gap-3 mb-2">
           <h3 className="text-white font-bold text-[19px] leading-tight tracking-[-0.3px]">
             {profile.title}
@@ -112,11 +125,11 @@ const ProfileCardNew: React.FC<ProfileCardNewProps> = ({ profile, isActive, onCl
           </span>
         </div>
 
-        <p className="text-white/50 text-[13px] leading-relaxed mb-4 line-clamp-2">
+        <p className="text-white/50 text-[13px] leading-relaxed mb-4 line-clamp-2 min-h-[2.6em]">
           {profile.description}
         </p>
 
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-4 mt-auto">
           {profile.products.slice(0, 2).map(prod => (
             <span
               key={prod}
@@ -133,9 +146,9 @@ const ProfileCardNew: React.FC<ProfileCardNewProps> = ({ profile, isActive, onCl
         </div>
 
         <button
-          className="w-full bg-white text-slate-900 font-semibold text-[15px] py-[13px] rounded-[16px] hover:bg-white/90 active:scale-95 transition-all duration-150"
+          className="w-full bg-white text-jackson-deep font-semibold text-[15px] py-[13px] rounded-[16px] active:scale-95 transition-all duration-200 shadow-[0_4px_16px_rgba(0,0,0,0.18)] hover:bg-jackson-cream"
         >
-          Voir mes offres
+          Voir mes offres →
         </button>
       </div>
     </div>

@@ -39,10 +39,10 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
         // ─── Apple Design System Palette ───
-        // Action Blue — la seule et unique couleur interactive
-        "apple-blue":       "#0066cc",
-        "apple-blue-focus": "#0071e3",
-        "apple-blue-dark":  "#2997ff",  // version tuile sombre
+        // Action color — Jackson teal (charte hybride teal + accents verts vifs)
+        "apple-blue":       "#0F766E",  // primary CTA → jackson-teal
+        "apple-blue-focus": "#0D5F58",  // hover/focus → teal darker
+        "apple-blue-dark":  "#2CC295",  // dark-section accent → jackson-meadow
         // Ink (texte)
         "apple-ink":        "#1d1d1f",
         "apple-ink-80":     "#333333",
@@ -61,17 +61,29 @@ module.exports = {
         // Hairlines / Dividers
         "apple-hairline":   "#e0e0e0",
         "apple-divider":    "#f0f0f0",
-        // Rétro-compatibilité — aliases (à migrer progressivement)
-        "jackson-deep":     "#272729",
-        "jackson-vivid":    "#0066cc",
-        "jackson-light":    "#2997ff",
-        "jackson-cream":    "#f5f5f7",
-        "jackson-night":    "#1d1d1f",
-        "jackson-slate":    "#7a7a7a",
+        // ─── Jackson Brand Palette ───
+        // Identité teal renforcée + accents verts vifs (inspiration palette réf.)
+        "jackson-teal":      "#0F766E",  // teal principal (logo, primary CTA)
+        "jackson-teal-deep": "#134E4A",  // teal profond (texte sur clair)
+        "jackson-bangladesh":"#03624C",  // vert sombre (sections immersives)
+        "jackson-meadow":    "#2CC295",  // accent vif (highlight, success, badge)
+        "jackson-mint":      "#2FA98C",  // mint secondaire (hover, dégradés)
+        "jackson-caribbean": "#00DF81",  // accent éclat (notifications rares)
+        "jackson-pine":      "#063028",  // pine ultra-sombre (footer, hero overlay)
+        "jackson-cream":     "#F0FDFA",  // canvas clair (light bg)
+        "jackson-pearl":     "#ECFDF5",  // canvas alt
+        "jackson-stone":     "#707D7D",  // gris neutre (UI muted)
+
+        // Rétro-compatibilité — aliases (migration progressive vers tokens ci-dessus)
+        "jackson-deep":     "#134E4A",
+        "jackson-vivid":    "#2CC295",
+        "jackson-light":    "#2FA98C",
+        "jackson-night":    "#063028",
+        "jackson-slate":    "#707D7D",
         "jackson-gold":     "#F59E0B",
-        "jackson-blue":     "#0066cc",
-        "jackson-bg":       "#f5f5f7",
-        "jackson-border":   "#e0e0e0",
+        "jackson-blue":     "#0F766E",
+        "jackson-bg":       "#F0FDFA",
+        "jackson-border":   "#D1FAE5",
       },
       fontFamily: {
         // SF Pro Display sur macOS/iOS, Inter en fallback universel

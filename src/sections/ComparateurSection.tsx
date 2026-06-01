@@ -59,7 +59,7 @@ const ComparateurSection: React.FC = () => {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_0%,rgba(255,255,255,0.03),transparent_60%)]" />
       {/* Brand orb (conservé) */}
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(0,102,204,0.10), transparent 70%)', filter: 'blur(80px)' }} />
+        style={{ background: 'radial-gradient(circle, rgba(15,118,110,0.10), transparent 70%)', filter: 'blur(80px)' }} />
 
       <div className="relative z-10 section-container">
         <div className="section-inner">
@@ -126,7 +126,7 @@ const ComparateurSection: React.FC = () => {
 
             {/* ── Confort (featured) ── */}
             <div data-card>
-              <div className="border border-apple-blue/30 ring-1 ring-apple-blue/20 rounded-[18px] p-2 relative backdrop-blur-xl h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_60px_rgba(41,151,255,0.15)]">
+              <div className="border border-apple-blue/30 ring-1 ring-apple-blue/20 rounded-[18px] p-2 relative backdrop-blur-xl h-full flex flex-col transition-shadow duration-300 hover:shadow-[0_0_60px_rgba(44,194,149,0.15)]">
                 <div className="relative overflow-hidden rounded-[14px] bg-gradient-to-b from-white/[0.06] to-transparent flex-1 flex flex-col">
 
                   {/* Hero gradient top (conservé) */}
@@ -134,11 +134,11 @@ const ComparateurSection: React.FC = () => {
                     <div className="h-44 w-full rounded-t-[14px] overflow-hidden">
                       <div className="w-full h-full"
                         style={{
-                          background: 'linear-gradient(135deg, #0066cc 0%, #2997ff 50%, #0071e3 100%)',
+                          background: 'linear-gradient(135deg, #0F766E 0%, #2CC295 50%, #0D5F58 100%)',
                           opacity: 0.60,
                         }} />
                     </div>
-                    <div className="absolute inset-0 bg-[radial-gradient(60%_80%_at_80%_0%,rgba(41,151,255,0.25),transparent_60%)]" />
+                    <div className="absolute inset-0 bg-[radial-gradient(60%_80%_at_80%_0%,rgba(44,194,149,0.25),transparent_60%)]" />
                   </div>
 
                   <div className="relative p-6 flex flex-col flex-1">
