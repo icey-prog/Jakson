@@ -547,9 +547,8 @@ const ServicesSection: React.FC = () => {
     });
   }, [total]);
 
-  // Mount / mode change → init stack
+  // Mount → init stack (mobile + desktop)
   useEffect(() => {
-    if (!isDesktop) return;
     applyStack(active, false);
     return () => {
       cardRefs.current.forEach(el => el && anime.remove(el));
@@ -559,15 +558,14 @@ const ServicesSection: React.FC = () => {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDesktop]);
+  }, []);
 
   // On active change, animate stack
   useEffect(() => {
-    if (!isDesktop) return;
     applyStack(active, true);
-  }, [active, isDesktop, applyStack]);
+  }, [active, applyStack]);
 
-  // Auto-cycle every 5s (hover pauses)
+  // Auto-cycle desktop only (hover pauses)
   useEffect(() => {
     if (!isDesktop) return;
     autoCycleRef.current = setInterval(() => {
@@ -582,39 +580,24 @@ const ServicesSection: React.FC = () => {
     };
   }, [isDesktop, total]);
 
-  // Mobile carousel ref
-  const mobileScrollRef = useRef<HTMLDivElement>(null);
-  const lastMobileIdxRef = useRef(0);
-  const handleMobileScroll = useCallback(() => {
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    const cardW = el.firstElementChild ? (el.firstElementChild as HTMLElement).offsetWidth + 16 : 1;
-    const idx = Math.min(total - 1, Math.round(el.scrollLeft / cardW));
-    if (idx !== lastMobileIdxRef.current) {
-      lastMobileIdxRef.current = idx;
-      setActive(idx);
-      setShowSwipeHint(false);
-      haptic();
-    }
-  }, [total, haptic]);
-
-  useEffect(() => {
-    if (isDesktop) return;
-    const el = mobileScrollRef.current;
-    if (!el) return;
-    el.addEventListener('scroll', handleMobileScroll, { passive: true });
-    return () => el.removeEventListener('scroll', handleMobileScroll);
-  }, [isDesktop, handleMobileScroll]);
+  // Touch swipe (mobile stack)
+  const touchStartX = useRef(0);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) < 40) return;
+    setShowSwipeHint(false);
+    haptic();
+    if (diff > 0) setActive(prev => (prev + 1) % total);
+    else setActive(prev => (prev - 1 + total) % total);
+  };
 
   const goTo = (idx: number) => {
     setActive(idx);
-    if (!isDesktop) {
-      const el = mobileScrollRef.current;
-      if (!el) return;
-      const card = el.children[idx] as HTMLElement;
-      if (card) el.scrollTo({ left: card.offsetLeft, behavior: 'smooth' });
-    }
-    // Desktop: orbit anime.js snap handled by useEffect on `active` change
+    setShowSwipeHint(false);
+    haptic();
   };
 
   const activeService = ALL_SERVICES[FEATURED_IDS[active]];
@@ -640,125 +623,88 @@ const ServicesSection: React.FC = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
 
-            {/* ── Left: orbit (desktop) | carousel (mobile) ── */}
+            {/* ── Left: stack pile (mobile + desktop unified) ── */}
             <div className="lg:col-span-5">
-
-              {/* DESKTOP — tilted orbital 3D wheel (anime.js drift) */}
-              {isDesktop && (
-                <>
+              {/* Stack container — touch swipe + hover pause */}
+              <div
+                className="relative mx-auto"
+                style={{
+                  width: '100%',
+                  maxWidth: isDesktop ? '380px' : '300px',
+                  aspectRatio: '3 / 4',
+                  touchAction: 'pan-y',
+                }}
+                onMouseEnter={() => { isHoveringRef.current = true; }}
+                onMouseLeave={() => { isHoveringRef.current = false; }}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                {FEATURED_IDS.map((id, i) => (
                   <div
-                    className="relative mx-auto"
-                    style={{ width: '380px', height: '500px' }}
-                    onMouseEnter={() => { isHoveringRef.current = true; }}
-                    onMouseLeave={() => { isHoveringRef.current = false; }}
+                    key={id}
+                    ref={el => { cardRefs.current[i] = el; }}
+                    className="absolute inset-0 cursor-pointer"
+                    style={{ willChange: 'transform, opacity' }}
+                    onClick={() => goTo(i)}
                   >
-                    {/* Stacked cards — anime.js driven */}
-                    {FEATURED_IDS.map((id, i) => (
-                      <div
-                        key={id}
-                        ref={el => { cardRefs.current[i] = el; }}
-                        className="absolute inset-0 cursor-pointer"
-                        style={{ willChange: 'transform, opacity' }}
-                        onClick={() => goTo(i)}
-                      >
-                        <OrbitCard
-                          service={ALL_SERVICES[id]}
-                          idx={i}
-                          total={total}
-                          isActive={i === active}
-                        />
-                      </div>
-                    ))}
-
-                    {/* Soft floor shadow under stack */}
-                    <div
-                      className="absolute left-1/2 bottom-[-24px] -translate-x-1/2 w-[320px] h-[28px] pointer-events-none"
-                      style={{
-                        background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(15,118,110,0.20), transparent 70%)',
-                        filter: 'blur(8px)',
-                      }}
+                    <OrbitCard
+                      service={ALL_SERVICES[id]}
+                      idx={i}
+                      total={total}
+                      isActive={i === active}
                     />
                   </div>
+                ))}
 
-                  {/* Orbit controls */}
-                  <div className="flex items-center justify-center gap-3 mt-8">
+                {/* Soft floor shadow */}
+                <div
+                  className="absolute left-1/2 -bottom-6 -translate-x-1/2 w-[80%] h-[24px] pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(ellipse 50% 50% at 50% 50%, rgba(15,118,110,0.20), transparent 70%)',
+                    filter: 'blur(8px)',
+                  }}
+                />
+              </div>
+
+              {/* Controls — chevrons + dots (mobile + desktop) */}
+              <div className="flex items-center justify-center gap-3 mt-10">
+                <button
+                  onClick={() => goTo((active - 1 + total) % total)}
+                  className="w-11 h-11 rounded-full bg-white border border-jackson-border flex items-center justify-center text-jackson-deep hover:border-jackson-teal hover:text-jackson-teal transition-colors cursor-pointer shadow-[0_4px_12px_rgba(15,118,110,0.08)]"
+                  aria-label="Service précédent"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <div className="flex">
+                  {FEATURED_IDS.map((_, i) => (
                     <button
-                      onClick={() => goTo((active - 1 + total) % total)}
-                      className="w-11 h-11 rounded-full bg-white border border-jackson-border flex items-center justify-center text-jackson-deep hover:border-jackson-teal hover:text-jackson-teal transition-colors cursor-pointer shadow-[0_4px_12px_rgba(15,118,110,0.08)]"
-                      aria-label="Service précédent"
+                      key={i}
+                      onClick={() => goTo(i)}
+                      className="w-11 h-11 flex items-center justify-center cursor-pointer group"
+                      aria-label={`Service ${i + 1}`}
                     >
-                      <ChevronLeft size={18} />
+                      <span
+                        className={`h-2 rounded-full transition-all duration-300 ${
+                          i === active ? 'w-8 bg-jackson-teal' : 'w-2 bg-jackson-teal/25 group-hover:bg-jackson-teal/50'
+                        }`}
+                      />
                     </button>
-                    <div className="flex gap-2">
-                      {FEATURED_IDS.map((_, i) => (
-                        <button
-                          key={i}
-                          onClick={() => goTo(i)}
-                          className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                            i === active ? 'w-8 bg-jackson-teal' : 'w-2 bg-jackson-teal/25 hover:bg-jackson-teal/50'
-                          }`}
-                          aria-label={`Service ${i + 1}`}
-                        />
-                      ))}
-                    </div>
-                    <button
-                      onClick={() => goTo((active + 1) % total)}
-                      className="w-11 h-11 rounded-full bg-white border border-jackson-border flex items-center justify-center text-jackson-deep hover:border-jackson-teal hover:text-jackson-teal transition-colors cursor-pointer shadow-[0_4px_12px_rgba(15,118,110,0.08)]"
-                      aria-label="Service suivant"
-                    >
-                      <ChevronRight size={18} />
-                    </button>
-                  </div>
-                </>
-              )}
+                  ))}
+                </div>
+                <button
+                  onClick={() => goTo((active + 1) % total)}
+                  className="w-11 h-11 rounded-full bg-white border border-jackson-border flex items-center justify-center text-jackson-deep hover:border-jackson-teal hover:text-jackson-teal transition-colors cursor-pointer shadow-[0_4px_12px_rgba(15,118,110,0.08)]"
+                  aria-label="Service suivant"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
 
-              {/* MOBILE — horizontal scroll carousel */}
-              {!isDesktop && (
-                <>
-                  <div
-                    ref={mobileScrollRef}
-                    className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                  >
-                    {FEATURED_IDS.map((id, i) => (
-                      <div
-                        key={id}
-                        className="snap-center shrink-0 w-[78vw] max-w-[320px] aspect-[3/4] relative"
-                      >
-                        <OrbitCard
-                          service={ALL_SERVICES[id]}
-                          idx={i}
-                          total={total}
-                          isActive={i === active}
-                        />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Dots with 44px hit area wrapper */}
-                  <div className="flex justify-center mt-3">
-                    {FEATURED_IDS.map((_, i) => (
-                      <button
-                        key={i}
-                        onClick={() => goTo(i)}
-                        className="w-11 h-11 flex items-center justify-center cursor-pointer group"
-                        aria-label={`Service ${i + 1}`}
-                      >
-                        <span
-                          className={`h-2 rounded-full transition-all duration-300 ${
-                            i === active ? 'w-8 bg-jackson-teal' : 'w-2 bg-jackson-teal/25 group-hover:bg-jackson-teal/50'
-                          }`}
-                        />
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Swipe hint — disparait après 1ère interaction */}
-                  {showSwipeHint && (
-                    <p className="text-center text-[12px] text-jackson-deep/45 mt-2 animate-pulse-dot">
-                      ← Faites glisser →
-                    </p>
-                  )}
-                </>
+              {/* Swipe hint mobile only — disappears after first interaction */}
+              {!isDesktop && showSwipeHint && (
+                <p className="text-center text-[12px] text-jackson-deep/45 mt-3 animate-pulse-dot">
+                  ← Faites glisser ou tapez sur une carte →
+                </p>
               )}
             </div>
 
