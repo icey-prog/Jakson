@@ -111,45 +111,139 @@ interface OrbitCardProps {
 
 const OrbitCard: React.FC<OrbitCardProps> = ({ service, idx, total, isActive }) => {
   const Icon = service.icon;
+  const numberLabel = String(idx + 1).padStart(2, '0');
+
   return (
     <div
-      className="w-full h-full rounded-[28px] overflow-hidden border border-white/20 shadow-[0_24px_60px_rgba(15,118,110,0.18)]"
+      className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/15"
       style={{
-        background: `linear-gradient(160deg, ${service.iconBg} 0%, ${shade(service.iconBg, -25)} 100%)`,
+        background: `linear-gradient(155deg, ${service.iconBg} 0%, ${shade(service.iconBg, -30)} 65%, ${shade(service.iconBg, -45)} 100%)`,
+        boxShadow: `0 24px 60px ${service.iconBg}45, inset 0 1px 0 rgba(255,255,255,0.10)`,
       }}
     >
+      {/* ── Layer 1: SVG grain texture (premium editorial) ── */}
+      <svg
+        className="absolute inset-0 w-full h-full opacity-[0.10] mix-blend-overlay pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <filter id={`noise-${idx}`}>
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
+          <feColorMatrix values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0" />
+        </filter>
+        <rect width="100%" height="100%" filter={`url(#noise-${idx})`} />
+      </svg>
+
+      {/* ── Layer 2: Decorative concentric arcs (top-right) ── */}
+      <svg
+        className="absolute -top-12 -right-12 w-64 h-64 pointer-events-none opacity-[0.18]"
+        viewBox="0 0 200 200"
+        fill="none"
+      >
+        <circle cx="100" cy="100" r="90" stroke="white" strokeWidth="0.8" />
+        <circle cx="100" cy="100" r="70" stroke="white" strokeWidth="0.8" strokeDasharray="3 4" />
+        <circle cx="100" cy="100" r="50" stroke="white" strokeWidth="0.8" />
+        <circle cx="100" cy="100" r="30" stroke="white" strokeWidth="0.8" strokeDasharray="2 3" />
+      </svg>
+
+      {/* ── Layer 3: Big watermark number (background) ── */}
       <div
-        className="absolute inset-0 opacity-[0.07] pointer-events-none"
+        className="absolute right-4 bottom-2 font-display font-bold leading-none pointer-events-none select-none"
         style={{
-          backgroundImage:
-            'radial-gradient(circle at 80% 20%, rgba(255,255,255,0.6) 0%, transparent 50%)',
+          fontSize: '180px',
+          color: 'rgba(255,255,255,0.06)',
+          letterSpacing: '-8px',
+        }}
+      >
+        {numberLabel}
+      </div>
+
+      {/* ── Layer 4: Diagonal gradient highlight ── */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 35%, transparent 70%, rgba(0,0,0,0.20) 100%)',
         }}
       />
-      <div className="relative h-full p-6 md:p-8 flex flex-col justify-between text-white">
+
+      {/* ── Layer 5: Giant icon silhouette (illustration) ── */}
+      <div className="absolute -bottom-6 -left-6 pointer-events-none opacity-[0.10]">
+        <Icon size={220} strokeWidth={0.9} className="text-white" />
+      </div>
+
+      {/* ── Foreground content ── */}
+      <div className="relative h-full p-6 md:p-7 flex flex-col justify-between text-white">
+
+        {/* Top row: tag + numbering */}
         <div className="flex items-start justify-between">
           {service.tag ? (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[10px] md:text-[11px] font-bold uppercase tracking-[0.16em]">
-              ★ {service.tag}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-xl text-[10px] md:text-[11px] font-bold uppercase tracking-[0.18em] border border-white/15 shadow-[0_2px_8px_rgba(0,0,0,0.10)]">
+              <span className="text-amber-200">★</span> {service.tag}
             </span>
           ) : <span />}
-          <span className="font-display font-semibold text-[13px] md:text-[15px] text-white/55">
-            {String(idx + 1).padStart(2, '0')}<span className="text-white/30">/{String(total).padStart(2, '0')}</span>
-          </span>
-        </div>
-
-        <div className="flex items-center justify-center my-auto">
-          <div className="w-20 h-20 md:w-24 md:h-24 rounded-[20px] bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/20">
-            <Icon size={40} strokeWidth={1.5} className="text-white" />
+          <div className="text-right">
+            <span className="font-display font-semibold text-[13px] md:text-[14px] text-white tracking-[0.08em]">
+              {numberLabel}
+            </span>
+            <span className="font-display text-[11px] text-white/40 tracking-[0.10em]">
+              /{String(total).padStart(2, '0')}
+            </span>
           </div>
         </div>
 
+        {/* Middle: icon glass chip — smaller, refined */}
+        <div className="my-auto">
+          <div
+            className="w-16 h-16 md:w-[68px] md:h-[68px] rounded-2xl flex items-center justify-center"
+            style={{
+              background: 'rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.18)',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.20)',
+            }}
+          >
+            <Icon size={30} strokeWidth={1.5} className="text-white" />
+          </div>
+        </div>
+
+        {/* Bottom: title + price chip + dotted divider */}
         <div>
-          <h3 className="font-display font-semibold text-[22px] md:text-[26px] leading-[1.1] tracking-[-0.4px] mb-1.5">
+          <p className="text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-white/55 font-semibold mb-1.5">
+            Jackson Assurances
+          </p>
+          <h3
+            className="font-display font-semibold leading-[1.0] tracking-[-0.5px] mb-3"
+            style={{ fontSize: 'clamp(20px, 3vw, 26px)' }}
+          >
             {service.title}
           </h3>
-          {service.priceFrom && isActive && (
-            <p className="text-[13px] md:text-[14px] text-white/80 font-medium">{service.priceFrom}</p>
-          )}
+
+          {/* Dotted hairline */}
+          <div
+            className="h-px w-full mb-3"
+            style={{
+              backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.30) 50%, transparent 0%)',
+              backgroundSize: '6px 1px',
+              backgroundRepeat: 'repeat-x',
+            }}
+          />
+
+          {/* Price + metric */}
+          <div className="flex items-center justify-between gap-3">
+            {service.priceFrom ? (
+              <p className="text-[12px] md:text-[13px] text-white/85 font-medium">
+                <span className="text-white/55">À partir de</span>{' '}
+                <span className="text-white font-semibold">{service.priceFrom.replace('Dès ', '')}</span>
+              </p>
+            ) : <span />}
+            {isActive && (
+              <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.14em] text-white/65 font-semibold">
+                <span className="w-1 h-1 rounded-full bg-white/80 animate-pulse-dot" />
+                Actif
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -220,12 +314,20 @@ const DetailPanel: React.FC<{ service: ServiceItem; idx: number }> = ({ service,
 
 const ServicesSection: React.FC = () => {
   const [active, setActive] = useState(0);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
   // SSR-safe init — prevents initial layout flash desktop→mobile→desktop
   const [isDesktop, setIsDesktop] = useState(() =>
     typeof window !== 'undefined' && window.innerWidth >= 1024
   );
   const total = FEATURED_IDS.length;
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Haptic feedback helper (Android support; iOS no-op safe)
+  const haptic = useCallback(() => {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      try { navigator.vibrate?.(10); } catch { /* noop */ }
+    }
+  }, []);
 
   // Track viewport
   useEffect(() => {
@@ -314,13 +416,19 @@ const ServicesSection: React.FC = () => {
 
   // Mobile carousel ref
   const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const lastMobileIdxRef = useRef(0);
   const handleMobileScroll = useCallback(() => {
     const el = mobileScrollRef.current;
     if (!el) return;
     const cardW = el.firstElementChild ? (el.firstElementChild as HTMLElement).offsetWidth + 16 : 1;
-    const idx = Math.round(el.scrollLeft / cardW);
-    setActive(Math.min(idx, total - 1));
-  }, [total]);
+    const idx = Math.min(total - 1, Math.round(el.scrollLeft / cardW));
+    if (idx !== lastMobileIdxRef.current) {
+      lastMobileIdxRef.current = idx;
+      setActive(idx);
+      setShowSwipeHint(false);
+      haptic();
+    }
+  }, [total, haptic]);
 
   useEffect(() => {
     if (isDesktop) return;
@@ -458,18 +566,30 @@ const ServicesSection: React.FC = () => {
                     ))}
                   </div>
 
-                  <div className="flex justify-center gap-2 mt-5">
+                  {/* Dots with 44px hit area wrapper */}
+                  <div className="flex justify-center mt-3">
                     {FEATURED_IDS.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => goTo(i)}
-                        className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
-                          i === active ? 'w-8 bg-jackson-teal' : 'w-2 bg-jackson-teal/25'
-                        }`}
+                        className="w-11 h-11 flex items-center justify-center cursor-pointer group"
                         aria-label={`Service ${i + 1}`}
-                      />
+                      >
+                        <span
+                          className={`h-2 rounded-full transition-all duration-300 ${
+                            i === active ? 'w-8 bg-jackson-teal' : 'w-2 bg-jackson-teal/25 group-hover:bg-jackson-teal/50'
+                          }`}
+                        />
+                      </button>
                     ))}
                   </div>
+
+                  {/* Swipe hint — disparait après 1ère interaction */}
+                  {showSwipeHint && (
+                    <p className="text-center text-[12px] text-jackson-deep/45 mt-2 animate-pulse-dot">
+                      ← Faites glisser →
+                    </p>
+                  )}
                 </>
               )}
             </div>
@@ -501,7 +621,7 @@ const ServicesSection: React.FC = () => {
             </p>
             <Link
               to="/services"
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-white border border-jackson-teal/30 text-jackson-teal text-[14px] md:text-[15px] font-semibold rounded-full hover:bg-jackson-teal/5 active:scale-95 transition-all duration-150 shadow-[0_4px_16px_rgba(15,118,110,0.08)]"
+              className="inline-flex items-center gap-1.5 px-6 py-3 lg:py-2.5 bg-white border border-jackson-teal/30 text-jackson-teal text-[14px] md:text-[15px] font-semibold rounded-full hover:bg-jackson-teal/5 active:scale-95 transition-all duration-150 shadow-[0_4px_16px_rgba(15,118,110,0.08)] min-h-[44px]"
             >
               Voir nos 10 solutions complètes
               <ArrowRight size={14} />
