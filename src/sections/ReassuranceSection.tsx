@@ -199,16 +199,16 @@ const ReassuranceSection: React.FC = () => {
             {stats.map((stat, i) => (
               <div
                 key={stat.label}
-                className={`text-center p-7 md:p-9 ${i < stats.length - 1 ? 'md:border-r border-white/10' : ''} ${i < 2 ? 'border-b md:border-b-0 border-white/10' : ''}`}
+                className={`min-w-0 text-center p-4 sm:p-7 md:p-9 ${i < stats.length - 1 ? 'md:border-r border-white/10' : ''} ${i < 2 ? 'border-b md:border-b-0 border-white/10' : ''}`}
               >
                 <p
                   className="font-display font-semibold text-white leading-[1.0] tracking-[-0.5px] mb-2"
-                  style={{ fontSize: 'clamp(2rem, 4vw, 44px)' }}
+                  style={{ fontSize: 'clamp(1.75rem, 7vw, 44px)' }}
                 >
                   {formatStat(animatedStats[i])}
                   {stat.suffix && <span className="text-[0.55em] ml-1 text-jackson-meadow font-medium">{stat.suffix}</span>}
                 </p>
-                <p className="text-[13px] text-white/75 leading-[1.4] uppercase tracking-[0.06em]">
+                <p className="text-[11px] sm:text-[13px] text-white/75 leading-[1.4] uppercase tracking-[0.04em] sm:tracking-[0.06em]">
                   {stat.label}
                 </p>
               </div>

@@ -8,7 +8,7 @@ import FormulaireSection from '@/sections/FormulaireSection';
 const DevisPage: React.FC = () => (
   <div className="min-h-screen bg-jackson-cream dark:bg-jackson-night">
     <Navigation />
-    <main className="pt-16">
+    <main className="pt-24">
       <FormulaireSection />
     </main>
     <Footer />
