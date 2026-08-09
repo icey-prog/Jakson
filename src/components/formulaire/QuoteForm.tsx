@@ -1,15 +1,21 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Check } from 'lucide-react';
+import React, { useState, useRef, useCallback, Suspense, lazy } from 'react';
 import ScrollReveal from '@/components/ScrollReveal';
+import StatusBadge from '@/components/StatusBadge';
+
+/* lottie-web pèse ~300 Ko : chargé seulement à l'écran de confirmation,
+   sinon il alourdit le chunk du formulaire pour tout le monde. */
+const ConfirmationLottie = lazy(() => import('./ConfirmationLottie'));
 import gsap from 'gsap';
 import type { QuoteFormData, QuoteStep, FieldErrors, TransitionDirection } from './quoteFormTypes';
 import { STEP_VALIDATORS } from './quoteFormTypes';
 import StepProgressBar from './StepProgressBar';
+import StepBien       from './StepBien';
 import StepIdentity   from './StepIdentity';
 import StepInsurance  from './StepInsurance';
 import StepContact    from './StepContact';
 
 const INITIAL_FORM_DATA: QuoteFormData = {
+  typeBien: 'voiture', trancheId: 't2', duree: 12,
   nom: '', prenom: '', age: '', typeAssurance: '',
   niveauGarantie: 2, telephone: '', email: '', optin: false,
 };
@@ -17,13 +23,16 @@ const INITIAL_FORM_DATA: QuoteFormData = {
 /* ── Confirmation screen ── */
 const SubmitConfirmation: React.FC = () => (
   <ScrollReveal className="text-center py-12">
-    <div className="w-16 h-16 rounded-full bg-jackson-vivid/20 border border-jackson-vivid/30 flex items-center justify-center mx-auto mb-6">
-      <Check size={32} className="text-jackson-vivid" />
-    </div>
-    <h3 className="font-display text-2xl font-bold text-white mb-3">
+    <Suspense fallback={<div className="h-40" />}>
+      <ConfirmationLottie />
+    </Suspense>
+    <StatusBadge tone="succes" className="mb-5">
+      Demande envoyée
+    </StatusBadge>
+    <h3 className="font-display text-2xl font-bold text-apple-ink mb-3">
       Merci ! Votre demande a bien été envoyée.
     </h3>
-    <p className="text-base text-white/60">
+    <p className="text-base text-apple-ink-48">
       Un conseiller vous contactera sous 24h avec votre devis personnalisé.
     </p>
   </ScrollReveal>
@@ -71,7 +80,7 @@ const QuoteForm: React.FC = () => {
 
   const goNext = () => {
     if (!validateCurrentStep()) return;
-    if (currentStep < 3)
+    if (currentStep < 4)
       animateStepChange('next', () => setCurrentStep(prev => (prev + 1) as QuoteStep));
   };
 
@@ -92,14 +101,32 @@ const QuoteForm: React.FC = () => {
   if (submitted) return <SubmitConfirmation />;
 
   const stepProps = { formData, errors, onUpdate: updateField };
+  const nbErreurs = Object.keys(errors).length;
 
   return (
     <ScrollReveal>
       <StepProgressBar currentStep={currentStep} />
+
+      {/* État courant du formulaire — un seul badge à la fois, sur les états qui existent vraiment. */}
+      {(loading || nbErreurs > 0) && (
+        <div className="mb-6 flex justify-center">
+          {loading ? (
+            <StatusBadge tone="en-cours"  anime>
+              Envoi en cours
+            </StatusBadge>
+          ) : (
+            <StatusBadge tone="echec" >
+              {nbErreurs === 1 ? '1 champ à corriger' : `${nbErreurs} champs à corriger`}
+            </StatusBadge>
+          )}
+        </div>
+      )}
+
       <div ref={contentRef}>
-        {currentStep === 1 && <StepIdentity  {...stepProps} onNext={goNext} />}
-        {currentStep === 2 && <StepInsurance {...stepProps} onNext={goNext} onBack={goBack} />}
-        {currentStep === 3 && <StepContact   {...stepProps} loading={loading} onSubmit={handleSubmit} onBack={goBack} />}
+        {currentStep === 1 && <StepBien      formData={formData} onUpdate={updateField} onNext={goNext} />}
+        {currentStep === 2 && <StepIdentity  {...stepProps} onNext={goNext} onBack={goBack} />}
+        {currentStep === 3 && <StepInsurance {...stepProps} onNext={goNext} onBack={goBack} />}
+        {currentStep === 4 && <StepContact   {...stepProps} loading={loading} onSubmit={handleSubmit} onBack={goBack} />}
       </div>
     </ScrollReveal>
   );

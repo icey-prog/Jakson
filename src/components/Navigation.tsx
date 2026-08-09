@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useLocation } from 'react-router';
 import { Menu, X, Moon, Sun, Phone } from 'lucide-react';
 import { useDarkMode } from '@/hooks/useDarkMode';
 import { useAvailability } from '@/hooks/useAvailability';
+import { useAnchorNav } from '@/hooks/useAnchorNav';
 
 const scrollLinks = [
   { label: 'Services', href: '#services' },
   { label: 'Formules', href: '#comparateur' },
   { label: 'Avis', href: '#reassurance' },
-  { label: 'Contact', href: '#formulaire' },
 ];
 
+/* « Contact » retiré : il pointait sur le formulaire, doublon du bouton « Demander un devis ». */
 const pageLinks = [
   { label: 'À propos', to: '/about' },
   { label: 'FAQ', to: '/faq' },
@@ -22,8 +23,7 @@ const Navigation: React.FC = () => {
   const { isDark, toggle } = useDarkMode();
   const isAvailable = useAvailability();
   const location = useLocation();
-  const navigate = useNavigate();
-  const isHome = location.pathname === '/';
+  const allerAncre = useAnchorNav();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -32,14 +32,8 @@ const Navigation: React.FC = () => {
   }, []);
 
   const handleScrollLink = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
     setMobileOpen(false);
-    if (isHome) {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/');
-      setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), 400);
-    }
+    allerAncre(e, href);
   };
 
   // Apple global-nav style: always dark bg, frosted glass on scroll
@@ -98,10 +92,10 @@ const Navigation: React.FC = () => {
             </button>
 
             {/* Primary CTA — Apple blue pill */}
-            <a href="#formulaire" onClick={e => handleScrollLink(e, '#formulaire')}
+            <Link to="/devis"
               className="inline-flex items-center gap-1.5 px-[18px] py-[8px] bg-apple-blue hover:bg-apple-blue-focus active:scale-95 text-white text-[14px] font-normal tracking-[-0.224px] rounded-full transition-all duration-150 cursor-pointer">
-              <Phone size={12} /> Devis gratuit
-            </a>
+              <Phone size={12} /> Demander un devis
+            </Link>
           </div>
 
           {/* Mobile controls */}
@@ -148,10 +142,10 @@ const Navigation: React.FC = () => {
                   {isAvailable ? 'Conseillers disponibles' : 'Conseillers indisponibles'}
                 </div>
               </div>
-              <a href="#formulaire" onClick={e => handleScrollLink(e, '#formulaire')}
+              <Link to="/devis" onClick={() => setMobileOpen(false)}
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-apple-blue hover:bg-apple-blue-focus text-white text-[17px] font-normal tracking-[-0.374px] rounded-full transition-all active:scale-95 cursor-pointer">
-                Obtenir un devis
-              </a>
+                Demander un devis
+              </Link>
             </div>
           </div>
         </div>

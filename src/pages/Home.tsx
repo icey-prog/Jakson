@@ -9,7 +9,6 @@ const ServicesSection = lazy(() => import('@/sections/ServicesSection'));
 const ComparateurSection = lazy(() => import('@/sections/ComparateurSection'));
 const ReassuranceSection = lazy(() => import('@/sections/ReassuranceSection'));
 const PartnersSection = lazy(() => import('@/sections/PartnersSection'));
-const FormulaireSection = lazy(() => import('@/sections/FormulaireSection'));
 const CTAFinalSection = lazy(() => import('@/sections/CTAFinalSection'));
 
 const Fallback = () => <div className="h-40 bg-jackson-cream dark:bg-jackson-night animate-pulse" />;
@@ -27,7 +26,7 @@ const Home: React.FC = () => {
             <ComparateurSection />
             <ReassuranceSection />
             <PartnersSection />
-            <FormulaireSection />
+            {/* Le formulaire vit désormais sur /devis — tunnel unique, plus de doublon. */}
             <CTAFinalSection />
           </Suspense>
         </main>

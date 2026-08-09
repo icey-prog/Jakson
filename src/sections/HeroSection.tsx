@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router';
 import AmbientOrb from '@/components/AmbientOrb';
 import { useAvailability } from '@/hooks/useAvailability';
 
@@ -11,6 +12,7 @@ const stats = [
 ];
 
 const HeroSection: React.FC = () => {
+  const navigate    = useNavigate();
   const sectionRef  = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
@@ -131,11 +133,11 @@ const HeroSection: React.FC = () => {
           {/* CTAs — Apple two-pill grammar */}
           <div ref={ctaRef} className="flex flex-col sm:flex-row gap-3 opacity-0">
             <a
-              href="#formulaire"
-              onClick={e => handleNavClick(e, '#formulaire')}
+              href="/devis"
+              onClick={e => { e.preventDefault(); navigate('/devis'); }}
               className="inline-flex items-center justify-center gap-2 px-[22px] py-[11px] bg-apple-blue hover:bg-apple-blue-focus active:scale-95 text-white text-[17px] font-normal tracking-[-0.374px] rounded-full transition-all duration-150 cursor-pointer"
             >
-              Obtenir mon devis gratuit
+              Demander un devis
               <ArrowRight size={15} />
             </a>
             <a

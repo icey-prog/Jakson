@@ -20,6 +20,8 @@ export interface ServiceItem {
   highlights?: string[];
   priceFrom?: string;
   illustrationKey?: IllustrationKey;
+  /** Illustration bitmap. Prioritaire sur `illustrationKey` quand elle est fournie. */
+  illustrationSrc?: string;
 }
 
 export const ALL_SERVICES: ServiceItem[] = [
@@ -71,6 +73,7 @@ export const ALL_SERVICES: ServiceItem[] = [
     ],
     priceFrom: 'Dès 3 500 FCFA/mois',
     illustrationKey: 'accident',
+    illustrationSrc: '/assets/illustration/CONTI DI FAMIGLIA - De Agostini - Frelly (Enrico Focarelli Barone).jpg',
   },
   {
     icon: Home,
@@ -87,6 +90,7 @@ export const ALL_SERVICES: ServiceItem[] = [
     ],
     priceFrom: 'Dès 12 000 FCFA/mois',
     illustrationKey: 'home',
+    illustrationSrc: '/assets/illustration/THOMAS DANTHONY (1).jpg',
   },
   { icon: Flame, title: 'Assurance Incendie', description: "Biens immobiliers et professionnels.", bgLight: '#ffe5e5', bgDark: '#660000', iconBg: '#0D5F58' },
   { icon: Scale, title: 'Responsabilité Civile', description: 'Dommages causés aux tiers.', bgLight: '#e2f6d5', bgDark: '#163300', iconBg: '#0F766E' },
@@ -305,7 +309,14 @@ const OrbitCard: React.FC<OrbitCardProps> = ({ service, idx, total, isActive }) 
     >
       {/* ─── Top zone: illustration ─── */}
       <div className="relative w-full" style={{ height: '55%', minHeight: '180px' }}>
-        {Illus ? (
+        {service.illustrationSrc ? (
+          <img
+            src={encodeURI(service.illustrationSrc)}
+            alt=""
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+        ) : Illus ? (
           <Illus accent={service.iconBg} deep={shade(service.iconBg, -40)} />
         ) : (
           <div
@@ -456,22 +467,13 @@ const DetailPanel: React.FC<{ service: ServiceItem; idx: number }> = ({ service,
         </div>
       )}
 
+      {/* Appel au devis retiré : la section CTA finale et le hero le portent déjà. */}
       <div className="flex flex-col sm:flex-row gap-3">
-        <a
-          href="#formulaire"
-          onClick={e => {
-            e.preventDefault();
-            document.querySelector('#formulaire')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-jackson-teal hover:bg-jackson-teal-deep active:scale-95 text-white text-[15px] font-semibold rounded-full transition-all duration-200 cursor-pointer"
-        >
-          Demander un devis <ArrowRight size={14} />
-        </a>
         <Link
           to="/services"
-          className="inline-flex items-center justify-center gap-1.5 px-5 py-3 text-jackson-teal hover:text-jackson-teal-deep text-[15px] font-semibold transition-colors duration-200"
+          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-jackson-teal hover:bg-jackson-teal-deep active:scale-95 text-white text-[15px] font-semibold rounded-full transition-all duration-200 cursor-pointer"
         >
-          Toutes les garanties →
+          Toutes les garanties <ArrowRight size={14} />
         </Link>
       </div>
     </div>

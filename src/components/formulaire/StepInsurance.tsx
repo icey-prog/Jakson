@@ -15,8 +15,8 @@ interface StepInsuranceProps {
 const StepInsurance: React.FC<StepInsuranceProps> = ({ formData, errors, onUpdate, onNext, onBack }) => (
   <div className="space-y-6">
     <div>
-      <label className="block text-sm font-medium text-white/80 mb-3">
-        Type d&apos;assurance <span className="text-red-400">*</span>
+      <label className="block text-sm font-medium text-apple-ink mb-3">
+        Type d&apos;assurance <span className="text-red-600">*</span>
       </label>
       <div className="grid grid-cols-2 gap-3">
         {INSURANCE_TYPES.map(type => (
@@ -25,8 +25,8 @@ const StepInsurance: React.FC<StepInsuranceProps> = ({ formData, errors, onUpdat
             onClick={() => onUpdate('typeAssurance', type)}
             className={`relative p-4 rounded-btn border-2 text-center font-medium transition-all duration-200 cursor-pointer ${
               formData.typeAssurance === type
-                ? 'border-jackson-vivid bg-jackson-vivid/15 text-white shadow-[0_0_20px_rgba(20,184,166,0.15)]'
-                : 'border-white/15 bg-white/5 text-white/60 hover:border-white/30 hover:text-white/90'
+                ? 'border-jackson-vivid bg-jackson-vivid/15 text-apple-ink shadow-[0_0_20px_rgba(20,184,166,0.15)]'
+                : 'border-black/12 bg-apple-parchment text-apple-ink-48 hover:border-apple-blue/40 hover:text-apple-ink'
             }`}
           >
             {formData.typeAssurance === type && (
@@ -38,11 +38,11 @@ const StepInsurance: React.FC<StepInsuranceProps> = ({ formData, errors, onUpdat
           </button>
         ))}
       </div>
-      {errors.typeAssurance && <p className="text-xs text-red-400 mt-2">{errors.typeAssurance}</p>}
+      {errors.typeAssurance && <p className="text-xs text-red-600 mt-2">{errors.typeAssurance}</p>}
     </div>
 
     <div>
-      <label className="block text-sm font-medium text-white/80 mb-3">
+      <label className="block text-sm font-medium text-apple-ink mb-3">
         Niveau de garantie souhaité
       </label>
       <input

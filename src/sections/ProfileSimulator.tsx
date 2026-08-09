@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Check, GraduationCap, Users, Briefcase, Shield } from 'lucide-react';
+import { Link } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
 import ProfileCardNew from '@/components/ProfileCardNew';
 import type { ProfileData } from '@/components/ProfileCardNew';
@@ -136,13 +137,8 @@ const ProfileSimulator: React.FC = () => {
 
   const selectedProfile = profiles.find(p => p.id === selected);
 
-  const scrollToForm = (e: React.MouseEvent) => {
-    e.preventDefault();
-    document.querySelector('#formulaire')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <section id="simulateur" className="section-padding tile-parchment overflow-hidden">
+    <section id="profil" className="section-padding tile-parchment overflow-hidden">
       <div className="section-container">
         <div className="section-inner">
 
@@ -223,13 +219,13 @@ const ProfileSimulator: React.FC = () => {
                   </span>
                 ))}
               </div>
-              <a
-                href="#formulaire"
-                onClick={scrollToForm}
+              {/* Un seul appel : le tunnel de devis. */}
+              <Link
+                to="/devis"
                 className="inline-flex items-center gap-1.5 px-[22px] py-[11px] bg-apple-blue hover:bg-apple-blue-focus active:scale-95 text-white text-[17px] font-normal tracking-[-0.374px] rounded-full transition-all duration-150 cursor-pointer"
               >
-                Obtenir mon devis — {selectedProfile.title}
-              </a>
+                Demander un devis — {selectedProfile.title}
+              </Link>
             </div>
           )}
 

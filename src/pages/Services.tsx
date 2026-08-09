@@ -65,12 +65,12 @@ const ServicesPage: React.FC = () => {
                       <h3 className="font-body font-bold text-[19px] text-slate-900 mb-2">{service.title}</h3>
                       <p className="text-[14px] text-slate-600 leading-relaxed mb-5">{service.description}</p>
 
-                      <a
-                        href="/#formulaire"
+                      <Link
+                        to="/devis"
                         className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-700 group-hover:gap-2.5 transition-all duration-200"
                       >
                         Demander un devis <ArrowRight size={13} />
-                      </a>
+                      </Link>
                     </div>
                   </ScrollReveal>
                 );
@@ -82,7 +82,7 @@ const ServicesPage: React.FC = () => {
               <p className="text-slate-500 dark:text-white/60 mb-5">
                 Besoin d'aide pour choisir ?
               </p>
-              <Link to="/#formulaire" className="btn-primary !rounded-xl">
+              <Link to="/devis" className="btn-primary !rounded-xl">
                 Parler à un conseiller
               </Link>
             </ScrollReveal>

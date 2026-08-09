@@ -10,7 +10,7 @@ interface ButtonProps {
 export const NextButton: React.FC<ButtonProps> = ({ onClick }) => (
   <button
     onClick={onClick}
-    className="px-7 py-3 bg-jackson-deep hover:bg-jackson-vivid text-white font-semibold rounded-btn transition-all duration-250 flex items-center gap-2 cursor-pointer shadow-[0_8px_24px_rgba(20,184,166,0.2)]"
+    className="px-7 py-3 bg-apple-blue hover:bg-apple-blue-focus text-white font-semibold rounded-btn transition-all duration-250 flex items-center gap-2 cursor-pointer shadow-[0_8px_24px_rgba(20,184,166,0.2)]"
   >
     Continuer <ArrowRight size={16} />
   </button>
@@ -19,7 +19,7 @@ export const NextButton: React.FC<ButtonProps> = ({ onClick }) => (
 export const BackButton: React.FC<ButtonProps> = ({ onClick }) => (
   <button
     onClick={onClick}
-    className="px-4 py-3 text-white/50 font-medium hover:text-white transition-colors flex items-center gap-2 cursor-pointer"
+    className="px-4 py-3 text-apple-ink-48 font-medium hover:text-apple-ink transition-colors flex items-center gap-2 cursor-pointer"
   >
     <ArrowLeft size={16} /> Retour
   </button>

@@ -1,41 +1,39 @@
 import React from 'react';
 import ScrollReveal from '@/components/ScrollReveal';
 import TextReveal from '@/components/TextReveal';
-import AmbientOrb from '@/components/AmbientOrb';
 import QuoteForm from '@/components/formulaire/QuoteForm';
 import CallbackCard from '@/components/formulaire/CallbackCard';
 
+/**
+ * Règle 60/30/10 sur la page devis :
+ *   60 % blanc — le canvas et la colonne du formulaire
+ *   30 % teal  — la carte de rappel, seul bloc sombre
+ *   10 % accent — les CTA en apple-blue et les validations en meadow
+ */
 const FormulaireSection: React.FC = () => {
   return (
-    <section
-      id="formulaire"
-      className="relative overflow-hidden py-24 md:py-32 bg-jackson-deep"
-    >
-      <AmbientOrb size={500} opacity={0.25} className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-
+    <section id="formulaire" className="relative overflow-hidden bg-white py-20 md:py-28">
       <div className="relative z-10 section-container">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16">
 
-          {/* Left: form */}
+          {/* Colonne formulaire — la surface dominante */}
           <div className="lg:col-span-3">
             <ScrollReveal className="mb-10">
-              <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest bg-white/10 border border-white/15 text-white/80 mb-4">
-                Devis Express
-              </span>
               <TextReveal
-                text="Obtenez Votre Devis Gratuit"
-                className="font-display text-3xl md:text-4xl font-bold text-white mb-4 leading-tight"
-                as="h2"
+                text="Demandez votre devis"
+                className="section-title mb-4"
+                as="h1"
               />
-              <p className="text-base text-white/60 max-w-md leading-relaxed">
-                Remplissez ce formulaire en 2 minutes et recevez votre devis personnalisé sous 24h.
+              <p className="section-subtitle">
+                Votre prix en un coup d&apos;œil, puis vos coordonnées. Un conseiller confirme
+                votre devis sous 24 h, sans engagement.
               </p>
             </ScrollReveal>
 
             <QuoteForm />
           </div>
 
-          {/* Right: callback + trust */}
+          {/* Colonne secondaire — le bloc teal qui porte les 30 % */}
           <div className="lg:col-span-2">
             <CallbackCard />
           </div>

@@ -1,15 +1,11 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
 import { useAuroraCanvas } from '@/hooks/useAuroraCanvas';
 
 const CTAFinalSection: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   useAuroraCanvas(canvasRef);
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    document.querySelector('#formulaire')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <section
@@ -49,13 +45,12 @@ const CTAFinalSection: React.FC = () => {
 
         <ScrollReveal delay={300}>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a
-              href="#formulaire"
-              onClick={handleClick}
+            <Link
+              to="/devis"
               className="inline-flex items-center justify-center px-[22px] py-[11px] bg-white text-apple-ink text-[17px] font-normal tracking-[-0.374px] rounded-full hover:bg-apple-parchment active:scale-95 transition-all duration-150 cursor-pointer"
             >
-              Obtenir mon devis maintenant
-            </a>
+              Demander un devis
+            </Link>
             <a
               href="tel:+22625380200"
               className="inline-flex items-center justify-center px-[22px] py-[11px] bg-transparent border border-white/30 hover:border-white/60 text-white text-[17px] font-normal tracking-[-0.374px] rounded-full transition-all duration-150 cursor-pointer"

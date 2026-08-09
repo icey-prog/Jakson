@@ -1,6 +1,13 @@
 /* Shared types, constants, and validators for the quote form flow */
 
+import type { TypeBien, TrancheId, Duree } from '@/lib/tarification';
+
 export interface QuoteFormData {
+  /* Étape 1 — le bien à assurer, qui donne le prix indicatif */
+  typeBien: TypeBien;
+  trancheId: TrancheId;
+  duree: Duree;
+  /* Étapes 2 à 4 */
   nom: string;
   prenom: string;
   age: string;
@@ -11,7 +18,7 @@ export interface QuoteFormData {
   optin: boolean;
 }
 
-export type QuoteStep = 1 | 2 | 3;
+export type QuoteStep = 1 | 2 | 3 | 4;
 export type FieldErrors = Record<string, string>;
 export type TransitionDirection = 'next' | 'prev';
 
@@ -24,9 +31,10 @@ export const GUARANTEE_LABELS = [
 ] as const;
 
 export const STEP_LABELS: Record<QuoteStep, string> = {
-  1: 'Votre profil',
-  2: 'Vos besoins',
-  3: 'Contact',
+  1: 'Votre bien',
+  2: 'Votre profil',
+  3: 'Vos besoins',
+  4: 'Contact',
 };
 
 /* ── Input styling helpers ── */
@@ -67,8 +75,14 @@ export function validateContactStep(data: QuoteFormData): FieldErrors {
   return errors;
 }
 
+/** Étape 1 : les trois choix ont toujours une valeur par défaut, rien à valider. */
+export function validateBienStep(): FieldErrors {
+  return {};
+}
+
 export const STEP_VALIDATORS: Record<QuoteStep, (d: QuoteFormData) => FieldErrors> = {
-  1: validateIdentityStep,
-  2: validateInsuranceStep,
-  3: validateContactStep,
+  1: validateBienStep,
+  2: validateIdentityStep,
+  3: validateInsuranceStep,
+  4: validateContactStep,
 };

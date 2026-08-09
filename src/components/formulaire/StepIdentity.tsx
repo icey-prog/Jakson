@@ -2,13 +2,14 @@ import React from 'react';
 import { Check } from 'lucide-react';
 import type { QuoteFormData, FieldErrors } from './quoteFormTypes';
 import { BASE_INPUT, inputStateClass } from './quoteFormTypes';
-import NextButton from './NavButtons';
+import NextButton, { BackButton } from './NavButtons';
 
 interface StepIdentityProps {
   formData: QuoteFormData;
   errors: FieldErrors;
   onUpdate: (field: keyof QuoteFormData, value: string) => void;
   onNext: () => void;
+  onBack: () => void;
 }
 
 const LABEL_MAP: Record<'nom' | 'prenom', string> = {
@@ -21,7 +22,7 @@ const PLACEHOLDER_MAP: Record<'nom' | 'prenom', string> = {
   prenom: 'Ex: Jean',
 };
 
-const StepIdentity: React.FC<StepIdentityProps> = ({ formData, errors, onUpdate, onNext }) => {
+const StepIdentity: React.FC<StepIdentityProps> = ({ formData, errors, onUpdate, onNext, onBack }) => {
   const inputClass = (field: keyof QuoteFormData) =>
     `${BASE_INPUT} ${inputStateClass(!!errors[field as string], !!formData[field])}`;
 
@@ -29,8 +30,8 @@ const StepIdentity: React.FC<StepIdentityProps> = ({ formData, errors, onUpdate,
     <div className="space-y-5">
       {(['nom', 'prenom'] as const).map(name => (
         <div key={name} className="relative">
-          <label className="block text-sm font-medium text-white/90 mb-1.5">
-            {LABEL_MAP[name]} <span className="text-red-400">*</span>
+          <label className="block text-sm font-medium text-apple-ink mb-1.5">
+            {LABEL_MAP[name]} <span className="text-red-600">*</span>
           </label>
           <div className="relative">
             <input
@@ -44,13 +45,13 @@ const StepIdentity: React.FC<StepIdentityProps> = ({ formData, errors, onUpdate,
               <Check size={16} className="absolute right-3 top-3.5 text-green-500" />
             )}
           </div>
-          {errors[name] && <p className="text-xs text-red-400 mt-1">{errors[name]}</p>}
+          {errors[name] && <p className="text-xs text-red-600 mt-1">{errors[name]}</p>}
         </div>
       ))}
 
       <div>
-        <label className="block text-sm font-medium text-white/90 mb-1.5">
-          Âge <span className="text-red-400">*</span>
+        <label className="block text-sm font-medium text-apple-ink mb-1.5">
+          Âge <span className="text-red-600">*</span>
         </label>
         <div className="relative w-32">
           <input
@@ -63,10 +64,11 @@ const StepIdentity: React.FC<StepIdentityProps> = ({ formData, errors, onUpdate,
             <Check size={16} className="absolute right-3 top-3.5 text-green-500" />
           )}
         </div>
-        {errors.age && <p className="text-xs text-red-400 mt-1">{errors.age}</p>}
+        {errors.age && <p className="text-xs text-red-600 mt-1">{errors.age}</p>}
       </div>
 
-      <div className="flex justify-end pt-2">
+      <div className="flex justify-between pt-2">
+        <BackButton onClick={onBack} />
         <NextButton onClick={onNext} />
       </div>
     </div>

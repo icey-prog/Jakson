@@ -1,22 +1,31 @@
 import React from 'react';
 import { Linkedin, Facebook } from 'lucide-react';
+import { Link } from 'react-router';
+import { useAnchorNav } from '@/hooks/useAnchorNav';
 
-const footerNav = [
+/* Ancres de la page d'accueil. Volontairement sans « Contact » / « Devis » :
+   la section CTA juste au-dessus du footer porte déjà cet appel. */
+const ancresAccueil = [
   { label: 'Accueil', href: '#hero' },
   { label: 'Nos Services', href: '#services' },
   { label: 'Nos Formules', href: '#comparateur' },
   { label: 'Témoignages', href: '#reassurance' },
   { label: 'Partenaires', href: '#partenaires' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Contact', href: '#formulaire' },
 ];
 
-const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-  e.preventDefault();
-  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-};
+/* Pages à part entière — `#faq` n'existe sur aucune page rendue, le lien était mort. */
+const pages = [
+  { label: 'Demander un devis', to: '/devis' },
+  { label: 'FAQ', to: '/faq' },
+  { label: 'À propos', to: '/about' },
+];
+
+const lienClasses =
+  'text-sm text-white/60 hover:text-white hover:translate-x-1 inline-block transition-all duration-200 cursor-pointer';
 
 const Footer: React.FC = () => {
+  const allerAncre = useAnchorNav();
+
   return (
     <footer className="bg-jackson-night text-white section-padding !pb-10">
       <div className="section-container">
@@ -39,15 +48,18 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="font-display text-base font-semibold mb-5">Navigation</h4>
             <ul className="space-y-3">
-              {footerNav.map((item) => (
+              {ancresAccueil.map((item) => (
                 <li key={item.href}>
-                  <a
-                    href={item.href}
-                    onClick={(e) => handleNavClick(e, item.href)}
-                    className="text-sm text-white/60 hover:text-white hover:translate-x-1 inline-block transition-all duration-200 cursor-pointer"
-                  >
+                  <a href={`/${item.href}`} onClick={(e) => allerAncre(e, item.href)} className={lienClasses}>
                     {item.label}
                   </a>
+                </li>
+              ))}
+              {pages.map((item) => (
+                <li key={item.to}>
+                  <Link to={item.to} className={lienClasses}>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

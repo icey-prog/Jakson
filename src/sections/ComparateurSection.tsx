@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Check, CheckCircle2, Star, Phone, Sparkles } from 'lucide-react';
-import { Link } from 'react-router';
+import { Check, CheckCircle2, Star, Phone } from 'lucide-react';
+import { Link, useNavigate } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
 import { useAnimeReveal } from '@/hooks/useAnimeReveal';
 
@@ -46,10 +46,11 @@ const FeatureItem: React.FC<{ text: string; variant?: 'default' | 'featured' }> 
 const ComparateurSection: React.FC = () => {
   const [annual, setAnnual] = useState(true);
   const cardsRef = useAnimeReveal<HTMLDivElement>({ selector: '[data-card]', stagger: 120, translateY: 40 });
+  const navigate = useNavigate();
 
-  const scrollToForm = (e: React.MouseEvent) => {
+  const allerDevis = (e: React.MouseEvent) => {
     e.preventDefault();
-    document.querySelector('#formulaire')?.scrollIntoView({ behavior: 'smooth' });
+    navigate('/devis');
   };
 
   return (
@@ -113,7 +114,7 @@ const ComparateurSection: React.FC = () => {
                   )}
                 </div>
 
-                <a href="#formulaire" onClick={scrollToForm}
+                <a href="/devis" onClick={allerDevis}
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-[11px] text-[17px] font-normal tracking-[-0.374px] text-apple-ink hover:bg-apple-parchment transition cursor-pointer active:scale-95">
                   Demander un devis
                 </a>
@@ -160,9 +161,15 @@ const ComparateurSection: React.FC = () => {
                       </span>
                     </div>
 
-                    <a href="#formulaire" onClick={scrollToForm}
+                    <a href="/devis" onClick={allerDevis}
                       className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-[11px] text-[17px] font-normal tracking-[-0.374px] text-white transition cursor-pointer bg-apple-blue hover:bg-apple-blue-focus active:scale-95">
-                      <Sparkles size={14} /> Choisir Confort
+                      <img
+                        src="/assets/gif/icons8-insurance.gif"
+                        alt=""
+                        aria-hidden
+                        className="w-5 h-5 shrink-0"
+                      />
+                      Choisir Confort
                     </a>
 
                     <ul className="mt-6 space-y-3 text-[14px] text-white/80 tracking-[-0.224px] flex-1">
@@ -186,7 +193,7 @@ const ComparateurSection: React.FC = () => {
                   <p className="text-[12px] text-white/35 mt-1">Tarification personnalisée</p>
                 </div>
 
-                <a href="#formulaire" onClick={scrollToForm}
+                <a href="/devis" onClick={allerDevis}
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full border border-apple-blue-dark/40 bg-apple-blue-dark/10 px-4 py-[11px] text-[17px] font-normal tracking-[-0.374px] text-apple-blue-dark hover:bg-apple-blue-dark/20 transition cursor-pointer active:scale-95">
                   <Phone size={14} /> Contacter un conseiller
                 </a>
