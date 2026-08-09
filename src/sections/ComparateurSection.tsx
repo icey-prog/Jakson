@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, CheckCircle2, Star, Phone } from 'lucide-react';
+import { Check, CheckCircle2, Star, Phone, ShieldCheck } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import ScrollReveal from '@/components/ScrollReveal';
 import { useAnimeReveal } from '@/hooks/useAnimeReveal';
@@ -104,7 +104,7 @@ const ComparateurSection: React.FC = () => {
                 <div>
                   <p className="text-[12px] uppercase tracking-[0.18em] text-white/50 font-semibold">Essentiel</p>
                   <div className="mt-3 flex items-end gap-2">
-                    <span className="text-[40px] font-semibold tracking-[-0.28px] text-white">
+                    <span className="text-[32px] sm:text-[40px] font-semibold tracking-[-0.28px] whitespace-nowrap text-white">
                       {annual ? '13 500' : '15 000'}
                     </span>
                     <span className="text-[14px] text-white/45 mb-1 tracking-[-0.224px]">FCFA/mois</span>
@@ -147,7 +147,7 @@ const ComparateurSection: React.FC = () => {
                       <div>
                         <p className="text-[12px] uppercase tracking-[0.18em] text-white/70 font-semibold">Confort</p>
                         <div className="mt-3 flex items-end gap-2">
-                          <span className="text-[40px] font-semibold tracking-[-0.28px] text-white">
+                          <span className="text-[32px] sm:text-[40px] font-semibold tracking-[-0.28px] whitespace-nowrap text-white">
                             {annual ? '31 500' : '35 000'}
                           </span>
                           <span className="text-[14px] text-white/55 mb-1 tracking-[-0.224px]">FCFA/mois</span>
@@ -163,12 +163,7 @@ const ComparateurSection: React.FC = () => {
 
                     <a href="/devis" onClick={allerDevis}
                       className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-[11px] text-[17px] font-normal tracking-[-0.374px] text-white transition cursor-pointer bg-apple-blue hover:bg-apple-blue-focus active:scale-95">
-                      <img
-                        src="/assets/gif/icons8-insurance.gif"
-                        alt=""
-                        aria-hidden
-                        className="w-5 h-5 shrink-0"
-                      />
+                      <ShieldCheck size={16} className="shrink-0" />
                       Choisir Confort
                     </a>
 
@@ -186,7 +181,7 @@ const ComparateurSection: React.FC = () => {
                 <div>
                   <p className="text-[12px] uppercase tracking-[0.18em] text-white/50 font-semibold">Premium</p>
                   <div className="mt-3 flex items-end gap-2">
-                    <span className="text-[40px] font-semibold tracking-[-0.28px] text-gradient-gold">
+                    <span className="text-[32px] sm:text-[40px] font-semibold tracking-[-0.28px] whitespace-nowrap text-gradient-gold">
                       Sur devis
                     </span>
                   </div>

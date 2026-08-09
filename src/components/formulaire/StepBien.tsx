@@ -3,7 +3,7 @@ import { Car, House, Laptop } from 'lucide-react';
 import { NextButton } from './NavButtons';
 import type { QuoteFormData } from './quoteFormTypes';
 import {
-  TRANCHES, DUREES, calculerPrime, formatFCFA, formuleLisible, getTranche,
+  TRANCHES, DUREES, calculerPrime, formatFCFA, getTranche,
   type TypeBien, type Duree,
 } from '@/lib/tarification';
 
@@ -114,10 +114,7 @@ const StepBien: React.FC<StepBienProps> = ({ formData, onUpdate, onNext }) => {
         <p className="mt-1 text-sm text-apple-ink-48">
           soit {formatFCFA(mensuel)} par mois, sur une base de {formatFCFA(getTranche(trancheId).reference)}
         </p>
-        <p className="mt-4 rounded-md bg-white px-3 py-2 font-mono text-xs text-apple-ink-48">
-          {formuleLisible(typeBien, trancheId, duree)} = {formatFCFA(prime)}
-        </p>
-        <p className="mt-3 text-xs text-apple-ink-48">
+        <p className="mt-4 text-xs text-apple-ink-48">
           Estimation indicative. Votre devis définitif est confirmé par un conseiller.
         </p>
       </div>

@@ -75,9 +75,14 @@ const HeroSection: React.FC = () => {
       className="relative min-h-[100dvh] flex flex-col overflow-hidden"
     >
       {/* Background photo */}
+      {/* L'image est carrée (1:1) : sur un hero large, un cadrage centré couperait
+          les visages. On ancre à 30 % de hauteur pour les garder dans le champ. */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105"
-        style={{ backgroundImage: "url('/assets/hero-family.jpg')" }}
+        className="absolute inset-0 bg-cover bg-no-repeat scale-105"
+        style={{
+          backgroundImage: "url('/assets/Family.jpg')",
+          backgroundPosition: 'center 30%',
+        }}
       />
 
       {/* Dark overlay — Apple photography-first: let the image breathe */}
@@ -154,16 +159,20 @@ const HeroSection: React.FC = () => {
       {/* Stats bar */}
       <div ref={statsRef} className="relative z-10 mx-6 lg:mx-[5vw] mb-8 opacity-0">
         <div className="max-w-container mx-auto">
-          <div className="bg-white/10 backdrop-blur-2xl border border-white/12 rounded-[18px] p-6 md:p-8">
-            <div className="grid grid-cols-3 gap-6 md:gap-8">
+          <div className="bg-white/10 backdrop-blur-2xl border border-white/12 rounded-[18px] p-5 sm:p-6 md:p-8">
+            {/* gap resserré et libellés fluides : à 320 px, un gap de 24 px laissait
+                58 px par colonne, trop peu pour « Années d'expérience ». */}
+            <div className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8">
               {stats.map((stat, i) => (
-                <div key={stat.label} className="text-center">
+                <div key={stat.label} className="min-w-0 text-center">
                   <p className="font-display font-semibold text-white leading-[1.07] tracking-[-0.28px]"
-                    style={{ fontSize: 'clamp(1.75rem, 3vw, 36px)' }}>
+                    style={{ fontSize: 'clamp(1.5rem, 6vw, 36px)' }}>
                     {formatNumber(counters[i], i)}
                     <span className="text-apple-blue-dark">{stat.suffix}</span>
                   </p>
-                  <p className="text-[12px] text-white/60 mt-1.5 tracking-[-0.12px]">{stat.label}</p>
+                  <p className="mt-1.5 text-[11px] sm:text-[12px] leading-snug text-white/60 tracking-[-0.12px] hyphens-auto">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
